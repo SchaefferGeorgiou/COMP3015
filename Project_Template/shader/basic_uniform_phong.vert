@@ -55,7 +55,7 @@ void main()
 
         float rDotv = max(dot(r,pos),0.0f);
 
-        specular = Material.Ks * Light.Ls * pow(rDotv,0.9f);  
+        specular = Material.Ks * Light.Ls * pow(rDotv,0.9f);//Because rDotv is a value between 0 and 1, increasing the size of the exponent too much causes the number to be near-zero. defaulting it to black.  
     }
 
     LightIntensity =  diffuse + specular;
