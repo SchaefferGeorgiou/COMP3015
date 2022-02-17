@@ -19,7 +19,7 @@ using glm::vec3;
 using glm::mat4;
 
 
-SceneBasic_Uniform::SceneBasic_Uniform() : torus(0.7f, 0.3f, 30,30){}
+SceneBasic_Uniform::SceneBasic_Uniform() : torus(0.7f, 0.3f, 50,50){}
 
 void SceneBasic_Uniform::initScene()
 {
@@ -29,6 +29,7 @@ void SceneBasic_Uniform::initScene()
 
 	model = mat4(1.0f);
 	model = glm::rotate(model, glm::radians(-35.0f), vec3(1.0f, 0.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(15.0f), vec3(0.0f, 1.0f, 0.0f));
 
 	view = glm::lookAt(vec3(0.0f, 0.0f, 2.0f), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
 
@@ -48,8 +49,8 @@ void SceneBasic_Uniform::initScene()
 void SceneBasic_Uniform::compile()
 {
 	try {
-		prog.compileShader("shader/basic_uniform.vert");
-		prog.compileShader("shader/basic_uniform.frag");
+		prog.compileShader("shader/basic_uniform_phong.vert");
+		prog.compileShader("shader/basic_uniform_phong.frag");
 		prog.link();
 		prog.use();
 	} catch (GLSLProgramException &e) {
