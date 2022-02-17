@@ -13,8 +13,9 @@ private:
     GLSLProgram prog;
     Torus torus;
 
-    void compile();
     void setMatrices();
+    void compile();
+    
 
 public:
     SceneBasic_Uniform();
