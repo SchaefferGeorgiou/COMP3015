@@ -19,7 +19,7 @@ using glm::vec3;
 using glm::mat4;
 
 
-SceneBasic_Uniform::SceneBasic_Uniform() : torus(0.7f, 0.3f, 50,50){}
+SceneBasic_Uniform::SceneBasic_Uniform() : torus(0.7f, 0.3f, 20,20){}
 
 void SceneBasic_Uniform::initScene()
 {
@@ -39,10 +39,12 @@ void SceneBasic_Uniform::initScene()
 	prog.setUniform("Ld", glm::vec3(1.0f, 1.0f, 1.0f));
 	prog.setUniform("Kd", glm::vec3(0.2f, 0.55f, 0.9f));
 
-	update(0.0f);
-
+	
+	prog.setUniform("Ls", glm::vec3(1.0f, 1.0f, 1.0f));
+	prog.setUniform("Ks", glm::vec3(1.0f, 1.0f, 1.0f));
 	
 
+	update(0.0f);
 
 }
 
