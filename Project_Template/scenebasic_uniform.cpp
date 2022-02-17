@@ -19,7 +19,7 @@ using glm::vec3;
 using glm::mat4;
 
 
-SceneBasic_Uniform::SceneBasic_Uniform() : torus(0.7f, 0.3f, 20,20){}
+SceneBasic_Uniform::SceneBasic_Uniform() : torus(0.7f, 0.3f, 50,50){}
 
 void SceneBasic_Uniform::initScene()
 {
@@ -28,24 +28,21 @@ void SceneBasic_Uniform::initScene()
 	glEnable(GL_DEPTH_TEST);
 
 	model = mat4(1.0f);
-	model = glm::rotate(model, glm::radians(-35.0f), vec3(1.0f, 0.0f, 0.0f));
-	model = glm::rotate(model, glm::radians(15.0f), vec3(0.0f, 1.0f, 0.0f));
+	//model = glm::rotate(model, glm::radians(-35.0f), vec3(1.0f, 0.0f, 0.0f));
+	//model = glm::rotate(model, glm::radians(15.0f), vec3(0.0f, 1.0f, 0.0f));
 
 	view = glm::lookAt(vec3(0.0f, 0.0f, 2.0f), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
 
 	projection = mat4(1.0f);
 
-	prog.setUniform("LightPosition", view * glm::vec4(5.0f, 5.0f, 2.0f, 1.0f));
-	prog.setUniform("Ld", glm::vec3(1.0f, 1.0f, 1.0f));
-	prog.setUniform("Kd", glm::vec3(0.2f, 0.55f, 0.9f));
-
+	prog.setUniform("Light.LightPosition", view * glm::vec4(5.0f, 5.0f, 2.0f, 1.0f));
+	prog.setUniform("Light.Ld", glm::vec3(1.0f, 1.0f, 1.0f));
+	prog.setUniform("Material.Kd", glm::vec3(0.2f, 0.55f, 0.9f));
 	
-	prog.setUniform("Ls", glm::vec3(1.0f, 1.0f, 1.0f));
-	prog.setUniform("Ks", glm::vec3(1.0f, 1.0f, 1.0f));
+	prog.setUniform("Light.Ls", glm::vec3(0.5f, 0.5f, 0.5f));
+	prog.setUniform("Material.Ks", glm::vec3(1.0f, 1.0f, 1.0f));
 	
-
-	update(0.0f);
-
+	update(0.4f);
 }
 
 void SceneBasic_Uniform::compile()
@@ -75,7 +72,9 @@ void SceneBasic_Uniform::setMatrices()
 
 void SceneBasic_Uniform::update( float t )
 {
-	//update your angle here
+	model = glm::rotate(model, glm::radians(0.4f * 2.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(0.4f * 2.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(0.4f * 2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 }
 
 void SceneBasic_Uniform::render()
