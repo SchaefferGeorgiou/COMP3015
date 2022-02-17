@@ -28,6 +28,7 @@ void SceneBasic_Uniform::initScene()
 	glEnable(GL_DEPTH_TEST);
 
 	model = mat4(1.0f);
+	model = glm::rotate(model, glm::radians(-35.0f), vec3(1.0f, 0.0f, 0.0f));
 
 	view = glm::lookAt(vec3(0.0f, 0.0f, 2.0f), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
 
@@ -57,10 +58,9 @@ void SceneBasic_Uniform::compile()
 
 void SceneBasic_Uniform::setMatrices()
 {
-
 	mat4 mv = view * model;
 
-	prog.setUniform("ModelVieMatrix", mv);
+	prog.setUniform("ModelViewMatrix", mv);
 
 	prog.setUniform("NormalMatrix", glm::mat3(vec3(mv[0]),
 		vec3(mv[1]), vec3(mv[2])));
@@ -75,7 +75,9 @@ void SceneBasic_Uniform::update( float t )
 
 void SceneBasic_Uniform::render()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_TEST);
+    glClear(GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
+
 
 	setMatrices();
     
