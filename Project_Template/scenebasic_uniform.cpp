@@ -35,10 +35,12 @@ void SceneBasic_Uniform::initScene()
 	projection = mat4(1.0f);
 
 	prog.setUniform("LightPosition", view * glm::vec4(5.0f, 5.0f, 2.0f, 1.0f));
+	prog.setUniform("Ld", glm::vec3(1.0f, 1.0f, 1.0f));
+	prog.setUniform("Kd", glm::vec3(0.2f, 0.55f, 0.9f));
 
 	update(0.0f);
 
-	render();
+	
 
 
 }
@@ -81,6 +83,7 @@ void SceneBasic_Uniform::render()
 
 	setMatrices();
     
+	torus.render();
     //create the rotation matrix here and update the uniform in the shader 
 	
 }
