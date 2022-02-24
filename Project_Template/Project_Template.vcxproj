@@ -148,6 +148,8 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="helper\glslprogram.cpp" />
     <ClCompile Include="helper\glutils.cpp" />
+    <ClCompile Include="helper\objmesh.cpp" />
+    <ClCompile Include="helper\plane.cpp" />
     <ClCompile Include="helper\teapot.cpp" />
     <ClCompile Include="helper\torus.cpp" />
     <ClCompile Include="helper\trianglemesh.cpp" />
@@ -159,11 +161,16 @@
     <None Include="shader\basic_uniform_diffuse.vert" />
     <None Include="shader\basic_uniform_phong.frag" />
     <None Include="shader\basic_uniform_phong.vert" />
+    <None Include="shader\basic_uniform_phong_multiple.frag" />
+    <None Include="shader\basic_uniform_phong_multiple.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="helper\aabb.h" />
     <ClInclude Include="helper\drawable.h" />
     <ClInclude Include="helper\glslprogram.h" />
     <ClInclude Include="helper\glutils.h" />
+    <ClInclude Include="helper\objmesh.h" />
+    <ClInclude Include="helper\plane.h" />
     <ClInclude Include="helper\scene.h" />
     <ClInclude Include="helper\scenerunner.h" />
     <ClInclude Include="helper\stb\stb_image.h" />
