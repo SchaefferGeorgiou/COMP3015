@@ -1,4 +1,4 @@
-#version 430
+#version 460
 
 layout (location = 0) in vec3 VertexPosition;
 //layout (location = 1) in vec3 VertexColor;
@@ -38,7 +38,7 @@ vec3 phongModel(int light, vec3 position, vec3 n)
 
     float sDotn = max(dot(s,n), 0.0);
 
-    vec3 diffuse = Material.Kd * vec3(0.3f,0.2f,0.5f) * sDotn;
+    vec3 diffuse = Material.Kd * vec3(0.8f,0.8f,0.8f) * sDotn;
 
     vec3 specular = vec3(0.0f);
 
@@ -51,7 +51,7 @@ vec3 phongModel(int light, vec3 position, vec3 n)
 
      }
 
-    return ambient + Lights[light].L * (diffuse + specular);
+    return ambient + Lights[light].L * (diffuse * specular);
 }
 
 
