@@ -40,14 +40,17 @@ void SceneBasic_Uniform::initScene()
 
 	projection = mat4(1.0f);
 
-	prog.setUniform("Lights[0].La", glm::vec3(0.5f, 0.5f, 0.5f));
+	prog.setUniform("Lights[0].La", glm::vec3(0.8f, 0.0f, 0.0f));
+	prog.setUniform("Lights[0].Ld", glm::vec3(0.8f, 0.0f, 0.0f));
 	prog.setUniform("Lights[0].L", glm::vec3(0.8f, 0.0f, 0.0f));
 
-	prog.setUniform("Lights[1].La", glm::vec3(0.5f, 0.5f, 0.5f));
+	prog.setUniform("Lights[1].La", glm::vec3(0.0f, 0.8f, 0.0f));
+	prog.setUniform("Lights[1].Ld", glm::vec3(0.0f, 0.8f, 0.0f));
 	prog.setUniform("Lights[1].L", glm::vec3(0.0f, 0.8f, 0.0f));
 
-	prog.setUniform("Lights[2].La", glm::vec3(0.5f, 0.5f, 0.5f));
-	prog.setUniform("Lights[2].L", glm::vec3(0.0f, 0.0f, 0.8f));
+	//prog.setUniform("Lights[2].La", glm::vec3(0.2f, 0.2f, 0.2f));
+	//prog.setUniform("Lights[2].Ld", glm::vec3(0.8f, 0.8f, 0.8f));
+	//prog.setUniform("Lights[2].L", glm::vec3(0.0f, 0.0f, 0.8f));
 
 
 	float x, z;
@@ -57,8 +60,7 @@ void SceneBasic_Uniform::initScene()
 		name << "lights[" << i << "].Position";
 		x = 2.0f * cosf((glm::two_pi<float>() / 3) * i);
 		z = 2.0f * sinf((glm::two_pi<float>() / 3) * i);
-		prog.setUniform(name.str().c_str(), view * glm::vec4(x, 1.2f, z +
-			1.0f, 1.0f));
+		prog.setUniform(name.str().c_str(), view * glm::vec4(x, 1.2f, z + 1.0f, 1.0f));
 	}
 
 	
@@ -105,7 +107,7 @@ void SceneBasic_Uniform::render()
 	prog.setUniform("Material.Kd", 0.4f, 0.4f, 0.4f);
 	prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
 	prog.setUniform("Material.Ka", 0.5f, 0.5f, 0.5f);
-	prog.setUniform("Material.Shininess",0.05f);
+	prog.setUniform("Material.Shininess", 180.0f);
 	model = mat4(1.0f);
 	model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
 	setMatrices();
@@ -115,7 +117,7 @@ void SceneBasic_Uniform::render()
 	prog.setUniform("Material.Kd", 0.1f, 0.1f, 0.1f);
 	prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
 	prog.setUniform("Material.Ka", 0.1f, 0.1f, 0.1f);
-	prog.setUniform("Material.Shininess", 0.05f);
+	prog.setUniform("Material.Shininess", 180.0f);
 	model = mat4(1.0f);
 	model = glm::translate(model, vec3(0.0f, -0.45f, 0.0f));
 	setMatrices();
