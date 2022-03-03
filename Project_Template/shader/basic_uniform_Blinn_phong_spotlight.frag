@@ -1,4 +1,4 @@
-#version 460
+#version 430
 
 
 //in vec3 Colour;
@@ -45,8 +45,8 @@ vec3 phongModel(vec3 position, vec3 n)
     {
 
         vec3 v = normalize(-position.xyz);
-        vec3 r = reflect(-s,n);
-        specular = Material.Ks * pow(max( dot(r,v), 0.0), Material.Shininess);        
+        vec3 h = normalize(v + s);
+        specular = Material.Ks * pow(max( dot(h,n), 0.0), Material.Shininess);        
 
      }
 
