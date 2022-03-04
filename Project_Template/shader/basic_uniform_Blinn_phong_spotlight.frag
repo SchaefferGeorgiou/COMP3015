@@ -1,4 +1,4 @@
-#version 430
+#version 460
 
 
 //in vec3 Colour;
@@ -8,13 +8,17 @@ in vec3 Normal;
 layout (location = 0) out vec4 FragColour;
 
 
-uniform struct LightInfo
+uniform struct SpotLight
 {
-    vec4 Position;
-    vec3 La;
-    vec3 Ld;  
-    
-}Light;
+    vec3 Position;
+    vec3 Direction;
+	vec3 La;
+	vec3 Ld;
+	float Exponent;
+	float Cutoff;
+
+}Spot;
+
 
 uniform struct MaterialInfo
 {
@@ -27,12 +31,12 @@ uniform struct MaterialInfo
 
 
 
-vec3 phongModel(vec3 position, vec3 n)
+vec3 binnPhongModel(vec3 position, vec3 n)
 {
     
-    vec3 ambient = Material.Ka * Light.La;
+    vec3 ambient = Material.Ka * Spot.La;
     
-    vec3 s = normalize(((Light.Position).xyz - position));
+    vec3 s = normalize(((Spot.Position).xyz - position));
 
     float sDotn = max(dot(s,n), 0.0);
 
