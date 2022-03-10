@@ -10,15 +10,17 @@
 
 #include "helper/plane.h"
 #include "helper/objmesh.h"
+#include "helper/cube.h"
 
 class SceneBasic_Uniform : public Scene
 {
 private:
     GLSLProgram prog;
-    Torus torus;
-    Teapot teapot;
-    Plane plane;
-    std::unique_ptr<ObjMesh> mesh;
+    //Torus torus;
+    //Teapot teapot;
+    //Plane plane;
+    Cube cube;
+    //std::unique_ptr<ObjMesh> mesh;
 
     void setMatrices();
     void compile();

@@ -16,15 +16,15 @@ using std::endl;
 
 #include <sstream>
 
+#include "helper/texture.h"
+
 using glm::vec3;
 using glm::mat4;
 
 
-SceneBasic_Uniform::SceneBasic_Uniform() : plane(50.0f, 50.0f, 1, 1),
-										   teapot(14, glm::mat4(1.0f)),
-										   torus(1.75f * 0.75f, 0.75f * 0.75f, 50, 50)
+SceneBasic_Uniform::SceneBasic_Uniform() : cube(6)
 {
-	mesh = ObjMesh::load("../Project_Template/media/pig_triangulated.obj", true);
+	//mesh = ObjMesh::load("../Project_Template/media/pig_triangulated.obj", true);
 
 }
 
@@ -74,20 +74,24 @@ void SceneBasic_Uniform::initScene()
 
 	projection = mat4(1.0f);
 
-	prog.setUniform("Light.Ld", vec3(0.5f));
+	prog.setUniform("Light.Ld", vec3(1.0f));
 	prog.setUniform("Light.La", vec3(0.9f));
 
-	prog.setUniform("Fog.MaxDist", 15.0f);
-	prog.setUniform("Fog.MinDist", 0.2f);
-	prog.setUniform("Fog.Colour", vec3(0.5f, 0.5f, 0.5f));
+	GLuint brick = Texture::loadTexture("../Project_Template/media/texture/brick1.jpg");
+	GLuint moss = Texture::loadTexture("../Project_Template/media/texture/moss.png");
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, brick);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, moss);
 }
 
 void SceneBasic_Uniform::compile()
 {
 	try {
-		prog.compileShader("shader/basic_uniform_Blinn_phong_fog.vert");
-		prog.compileShader("shader/basic_uniform_Blinn_phong_fog.frag");
+		prog.compileShader("shader/basic_uniform_Blinn_phong_texture.vert");
+		prog.compileShader("shader/basic_uniform_Blinn_phong_multi_texture.frag");
 
 
 		prog.link();
@@ -131,44 +135,47 @@ void SceneBasic_Uniform::render()
 	//setMatrices();
 	//mesh->render();
 
-	glm::vec4 lightPos = glm::vec4(0.0f, 5.0f, 0.0f, 1.0f);
-	prog.setUniform("Light.Position", vec3(view * lightPos));
+	glm::vec3 lightPos = glm::vec3(1.0f, 2.0f, 1.0f);
+	prog.setUniform("Light.Position", lightPos);
 
 	glm::mat3 normalMatrix = glm::mat3(vec3(view[0]), vec3(view[1]), vec3(view[2]));
 	/*prog.setUniform("Light.Direction", normalMatrix * vec3(-lightPos));*/
 
-	prog.setUniform("Material.Kd", 0.2f, 0.55f, 0.9f);
+	//Cube
 	prog.setUniform("Material.Ks", 0.95f, 0.95f, 0.95f);
-	prog.setUniform("Material.Ka", 0.2f * 0.3f, 0.55f * 0.3f, 0.9f * 0.3f);
-	prog.setUniform("Material.Shininess", 100.0f);
-
-	//Teapot
+	prog.setUniform("Material.Shininess", 5.0f);
 	model = mat4(1.0f);
-	model = glm::translate(model, vec3(0.0f, 0.0f, -8.0f));
-	model = glm::rotate(model, glm::radians(45.0f), vec3(0.0f, 1.0f, 0.0f));
-	model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
+	model = glm::translate(model, vec3(0.0f, 0.0f, -1.0f));
 	setMatrices();
-	teapot.render();
+	cube.render();
 
-	//Donut
-	prog.setUniform("Material.Kd", 0.2f, 0.55f, 0.9f);
-	prog.setUniform("Material.Ks", 0.95f, 0.95f, 0.95f);
-	prog.setUniform("Material.Ka", 0.2f * 0.3f, 0.55f * 0.3f, 0.9f * 0.3f);
-	prog.setUniform("Material.Shininess", 100.0f);
-	model = mat4(1.0f);
-	model = glm::translate(model, vec3(-1.0f, 0.75f, 3.0f));
-	model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
-	setMatrices();
-	torus.render();
+	////Teapot
+	//model = mat4(1.0f);
+	//model = glm::translate(model, vec3(0.0f, 0.0f, -8.0f));
+	//model = glm::rotate(model, glm::radians(45.0f), vec3(0.0f, 1.0f, 0.0f));
+	//model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
+	//setMatrices();
+	//teapot.render();
 
-	//Plane
-	prog.setUniform("Material.Kd", 0.7f, 0.7f, 0.7f);
-	prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
-	prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
-	prog.setUniform("Material.Shininess", 180.0f);
-	model = mat4(1.0f);
-	setMatrices();
-	plane.render();    
+	////Donut
+	//prog.setUniform("Material.Kd", 0.2f, 0.55f, 0.9f);
+	//prog.setUniform("Material.Ks", 0.95f, 0.95f, 0.95f);
+	//prog.setUniform("Material.Ka", 0.2f * 0.3f, 0.55f * 0.3f, 0.9f * 0.3f);
+	//prog.setUniform("Material.Shininess", 100.0f);
+	//model = mat4(1.0f);
+	//model = glm::translate(model, vec3(-1.0f, 0.75f, 3.0f));
+	//model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
+	//setMatrices();
+	//torus.render();
+
+	////Plane
+	//prog.setUniform("Material.Kd", 0.7f, 0.7f, 0.7f);
+	//prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
+	//prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
+	//prog.setUniform("Material.Shininess", 180.0f);
+	//model = mat4(1.0f);
+	//setMatrices();
+	//plane.render();    
 }
 
 void SceneBasic_Uniform::resize(int w, int h)
