@@ -89,6 +89,12 @@
     <None Include="shader\basic_uniform_Blinn_phong_toon.vert">
       <Filter>shaders</Filter>
     </None>
+    <None Include="shader\basic_uniform_Blinn_phong_fog.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader\basic_uniform_Blinn_phong_fog.vert">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="helper\scene.h">

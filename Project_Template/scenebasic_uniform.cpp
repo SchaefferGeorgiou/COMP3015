@@ -74,16 +74,20 @@ void SceneBasic_Uniform::initScene()
 
 	projection = mat4(1.0f);
 
-	prog.setUniform("Light.Ld", vec3(0.9f));
+	prog.setUniform("Light.Ld", vec3(0.5f));
 	prog.setUniform("Light.La", vec3(0.9f));
+
+	prog.setUniform("Fog.MaxDist", 15.0f);
+	prog.setUniform("Fog.MinDist", 0.2f);
+	prog.setUniform("Fog.Colour", vec3(0.5f, 0.5f, 0.5f));
 
 }
 
 void SceneBasic_Uniform::compile()
 {
 	try {
-		prog.compileShader("shader/basic_uniform_Blinn_phong_toon.vert");
-		prog.compileShader("shader/basic_uniform_Blinn_phong_toon.frag");
+		prog.compileShader("shader/basic_uniform_Blinn_phong_fog.vert");
+		prog.compileShader("shader/basic_uniform_Blinn_phong_fog.frag");
 
 
 		prog.link();
@@ -140,7 +144,7 @@ void SceneBasic_Uniform::render()
 
 	//Teapot
 	model = mat4(1.0f);
-	model = glm::translate(model, vec3(0.0f, 0.0f, -2.0f));
+	model = glm::translate(model, vec3(0.0f, 0.0f, -8.0f));
 	model = glm::rotate(model, glm::radians(45.0f), vec3(0.0f, 1.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
 	setMatrices();

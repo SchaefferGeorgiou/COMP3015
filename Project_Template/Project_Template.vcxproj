@@ -157,6 +157,8 @@
     <ClCompile Include="scenebasic_uniform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shader\basic_uniform_Blinn_phong_fog.frag" />
+    <None Include="shader\basic_uniform_Blinn_phong_fog.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_spotlight.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_spotlight.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_toon.frag" />
