@@ -70,20 +70,20 @@ void SceneBasic_Uniform::initScene()
 	compile();
 	glEnable(GL_DEPTH_TEST);
 
-	view = glm::lookAt(vec3(5.0f, 5.0f, 7.5f), vec3(0.0f, 0.75f, 0.0f), vec3(0.0f,
-		1.0f, 0.0f));
+	view = glm::lookAt(vec3(5.0f, 5.0f, 7.5f), vec3(0.0f, 0.75f, 0.0f), vec3(0.0f,1.0f, 0.0f));
+
 	projection = mat4(1.0f);
-	prog.setUniform("Spot.L", vec3(0.9f));
-	prog.setUniform("Spot.La", vec3(0.5f));
-	prog.setUniform("Spot.Exponent", 50.0f);
-	prog.setUniform("Spot.Cutoff", glm::radians(15.0f));
+
+	prog.setUniform("Light.Ld", vec3(0.9f));
+	prog.setUniform("Light.La", vec3(0.9f));
+
 }
 
 void SceneBasic_Uniform::compile()
 {
 	try {
-		prog.compileShader("shader/basic_uniform_phong_multiple.vert");
-		prog.compileShader("shader/basic_uniform_phong_multiple.frag");
+		prog.compileShader("shader/basic_uniform_Blinn_phong_toon.vert");
+		prog.compileShader("shader/basic_uniform_Blinn_phong_toon.frag");
 
 
 		prog.link();
@@ -127,11 +127,11 @@ void SceneBasic_Uniform::render()
 	//setMatrices();
 	//mesh->render();
 
-	glm::vec4 lightPos = glm::vec4(0.0f, 10.0f, 0.0f, 1.0f);
-	prog.setUniform("Spot.Position", vec3(view * lightPos));
+	glm::vec4 lightPos = glm::vec4(0.0f, 5.0f, 0.0f, 1.0f);
+	prog.setUniform("Light.Position", vec3(view * lightPos));
 
 	glm::mat3 normalMatrix = glm::mat3(vec3(view[0]), vec3(view[1]), vec3(view[2]));
-	prog.setUniform("Spot.Direction", normalMatrix * vec3(-lightPos));
+	/*prog.setUniform("Light.Direction", normalMatrix * vec3(-lightPos));*/
 
 	prog.setUniform("Material.Kd", 0.2f, 0.55f, 0.9f);
 	prog.setUniform("Material.Ks", 0.95f, 0.95f, 0.95f);
@@ -164,9 +164,7 @@ void SceneBasic_Uniform::render()
 	prog.setUniform("Material.Shininess", 180.0f);
 	model = mat4(1.0f);
 	setMatrices();
-	plane.render();
-     
-	
+	plane.render();    
 }
 
 void SceneBasic_Uniform::resize(int w, int h)
