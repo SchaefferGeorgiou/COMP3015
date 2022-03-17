@@ -161,9 +161,12 @@
     <ClCompile Include="scenebasic_uniform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shader\basic_uniform_Blinn_phong_alpha.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_fog.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_fog.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_multi_texture.frag" />
+    <None Include="shader\basic_uniform_Blinn_phong_normal_map.frag" />
+    <None Include="shader\basic_uniform_Blinn_phong_normal_map.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_spotlight.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_spotlight.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_texture.frag" />

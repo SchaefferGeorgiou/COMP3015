@@ -22,10 +22,10 @@ using glm::vec3;
 using glm::mat4;
 
 
-SceneBasic_Uniform::SceneBasic_Uniform() : teapot(14, glm::mat4(1.0f))
+SceneBasic_Uniform::SceneBasic_Uniform()
 {
 	//mesh = ObjMesh::load("../Project_Template/media/pig_triangulated.obj", true);
-
+	ogre = ObjMesh::load("../Project_Template/media/bs_ears.obj", true);
 }
 
 //void SceneBasic_Uniform::initScene()
@@ -70,28 +70,30 @@ void SceneBasic_Uniform::initScene()
 	compile();
 	glEnable(GL_DEPTH_TEST);
 
-	view = glm::lookAt(vec3(5.0f, 5.0f, 7.5f), vec3(0.0f, 0.75f, 0.0f), vec3(0.0f,1.0f, 0.0f));
+	view = glm::lookAt(vec3(-1.0f, 0.25f, 1.0f),
+					   vec3(0.0f, 0.0f, 0.0f),
+					   vec3(0.0f, 1.0f, 0.0f));
 
 	projection = mat4(1.0f);
 
 	prog.setUniform("Light.Ld", vec3(1.0f));
 	prog.setUniform("Light.La", vec3(0.9f));
 
-	GLuint brick = Texture::loadTexture("../Project_Template/media/texture/brick1.jpg");
-	GLuint moss = Texture::loadTexture("../Project_Template/media/texture/moss.png");
+	GLuint diffuse = Texture::loadTexture("../Project_Template/media/texture/ogre_diffuse.png");
+	GLuint normal = Texture::loadTexture("../Project_Template/media/texture/ogre_normalmap.png");
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, brick);
+	glBindTexture(GL_TEXTURE_2D, diffuse);
 
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, moss);
+	glBindTexture(GL_TEXTURE_2D, normal);
 }
 
 void SceneBasic_Uniform::compile()
 {
 	try {
-		prog.compileShader("shader/basic_uniform_Blinn_phong_texture.vert");
-		prog.compileShader("shader/basic_uniform_Blinn_phong_multi_texture.frag");
+		prog.compileShader("shader/basic_uniform_Blinn_phong_normal_map.vert");
+		prog.compileShader("shader/basic_uniform_Blinn_phong_normal_map.frag");
 
 
 		prog.link();
@@ -135,12 +137,22 @@ void SceneBasic_Uniform::render()
 	//setMatrices();
 	//mesh->render();
 
+	//Ogre
+	prog.setUniform("Material.Kd", 0.4f, 0.4f, 0.4f);
+	prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
+	prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
+	prog.setUniform("Material.Shininess", 5.0f);
+	model = mat4(1.0f);
+	//model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
+	setMatrices();
+	ogre->render();
+
 	glm::vec3 lightPos = glm::vec3(1.0f, 2.0f, 1.0f);
 	prog.setUniform("Light.Position", lightPos);
 
 	glm::mat3 normalMatrix = glm::mat3(vec3(view[0]), vec3(view[1]), vec3(view[2]));
 	/*prog.setUniform("Light.Direction", normalMatrix * vec3(-lightPos));*/
-
+	
 	////Cube
 	//prog.setUniform("Material.Ks", 0.95f, 0.95f, 0.95f);
 	//prog.setUniform("Material.Shininess", 50.0f);
@@ -149,13 +161,13 @@ void SceneBasic_Uniform::render()
 	//setMatrices();
 	//cube.render();
 
-	//Teapot
-	model = mat4(1.0f);
-	model = glm::translate(model, vec3(0.0f, 0.0f, -1.0f));
-	model = glm::rotate(model, glm::radians(45.0f), vec3(0.0f, 1.0f, 0.0f));
-	model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
-	setMatrices();
-	teapot.render();
+	////Teapot
+	//model = mat4(1.0f);
+	//model = glm::translate(model, vec3(0.0f, 0.0f, -1.0f));
+	//model = glm::rotate(model, glm::radians(45.0f), vec3(0.0f, 1.0f, 0.0f));
+	//model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
+	//setMatrices();
+	//teapot.render();
 
 	////Donut
 	//prog.setUniform("Material.Kd", 0.2f, 0.55f, 0.9f);

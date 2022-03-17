@@ -17,10 +17,11 @@ class SceneBasic_Uniform : public Scene
 private:
     GLSLProgram prog;
     //Torus torus;
-    Teapot teapot;
+    //Teapot teapot;
     //Plane plane;
     //Cube cube;
     //std::unique_ptr<ObjMesh> mesh;
+    std::unique_ptr<ObjMesh> ogre;
 
     void setMatrices();
     void compile();

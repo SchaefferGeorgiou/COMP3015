@@ -1,14 +1,14 @@
 #version 430
 
-
-//in vec3 Colour;
 in vec3 Position;
-in vec3 Normal;
+in vec3 LightDir;
 in vec2 TexCoord;
+in vec3 ViewDir;
+
 
 layout (location = 0) out vec4 FragColour;
-layout (binding = 0) uniform sampler2D BaseTex;
-layout (binding = 1) uniform sampler2D AlphaTex;
+layout(binding=0) uniform sampler2D ColorTex;
+layout(binding=1) uniform sampler2D NormalMapTex;
 
 uniform struct LightInfo
 {
@@ -34,15 +34,16 @@ vec3 blinnPhong(vec3 position, vec3 n)
     
     vec3 s = normalize(((Light.Position).xyz - position)); //calculate s vector
 
-    vec3 texColour = texture(BaseTex, TexCoord).rgb;
-
+    
+    
+    vec3 colour = texture(ColorTex, TexCoord).rgb;
    
 
-    vec3 ambient = Light.La * texColour; 
+    vec3 ambient = Light.La * colour; 
     
     float sDotn = max(dot(s,n), 0.0f) ; //calculate dot product between s and n
     
-    vec3 diffuse = Light.Ld * texColour * sDotn; //calculate the diffuse
+    vec3 diffuse = Light.Ld * colour * sDotn; //calculate the diffuse
         
     vec3 specular = vec3(0.0f);
     
@@ -59,25 +60,10 @@ vec3 blinnPhong(vec3 position, vec3 n)
 
 void main()
 {
+    vec3 norm = texture(NormalMapTex, TexCoord).xyz;
+                        norm.xy = 2.0 * norm.xy - 1.0;
 
-    vec4 alphaMap = texture(AlphaTex, TexCoord).rgba;
-
-    if(alphaMap.a < 0.15)
-    {
-        discard;
-    }
-    else
-    {
-        if(gl_FrontFacing)
-        {
-            FragColour = vec4(blinnPhong(Position.xyz, Normal),1.0f);
-        }
-        else
-        {
-            FragColour = vec4(blinnPhong(Position.xyz, -Normal),1.0f);
-        }
-        
-    }
+    FragColour = vec4(blinnPhong(ViewDir.xyz, norm),1.0f);  
 
     
     
