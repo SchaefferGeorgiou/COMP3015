@@ -5,15 +5,13 @@ layout (location = 1) in vec3 VertexNormal;
 layout (location = 2) in vec2 VertexTexCoord;
 layout (location = 3) in vec4 VertexTangent;
 
-out vec3 Position;
-out vec3 Normal;
 out vec2 TexCoord;
 out vec3 LightDir;
 out vec3 ViewDir;
 
 uniform struct LightInfo
 {
-    vec3 Position;
+    vec4 Position;
     vec3 La;
     vec3 Ld;  
     
@@ -27,8 +25,6 @@ uniform mat4 MVP;
 
 void main()
 { 
-    Normal = normalize( NormalMatrix * VertexNormal);
-	Position = (ModelViewMatrix * vec4(VertexPosition,1.0)).xyz;
 
 	vec3 norm = normalize( NormalMatrix * VertexNormal );
     vec3 tang = normalize( NormalMatrix * vec3(VertexTangent) );

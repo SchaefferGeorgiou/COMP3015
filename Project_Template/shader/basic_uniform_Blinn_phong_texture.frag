@@ -11,7 +11,7 @@ layout (binding = 0) uniform sampler2D Tex1;
 
 uniform struct LightInfo
 {
-    vec3 Position;
+    vec4 Position;
     vec3 La;
     vec3 Ld;  
     
@@ -49,7 +49,7 @@ vec3 blinnPhong(vec3 position, vec3 n)
         specular = Material.Ks * pow(max( dot(h,n), 0.0), Material.Shininess); 
     }     
 
-    return ambient + diffuse + specular;
+    return  diffuse ;//+ specular;
 }
 
 
