@@ -22,7 +22,7 @@ using glm::vec3;
 using glm::mat4;
 
 
-SceneBasic_Uniform::SceneBasic_Uniform() : cube(6)
+SceneBasic_Uniform::SceneBasic_Uniform() : teapot(14, glm::mat4(1.0f))
 {
 	//mesh = ObjMesh::load("../Project_Template/media/pig_triangulated.obj", true);
 
@@ -141,21 +141,21 @@ void SceneBasic_Uniform::render()
 	glm::mat3 normalMatrix = glm::mat3(vec3(view[0]), vec3(view[1]), vec3(view[2]));
 	/*prog.setUniform("Light.Direction", normalMatrix * vec3(-lightPos));*/
 
-	//Cube
-	prog.setUniform("Material.Ks", 0.95f, 0.95f, 0.95f);
-	prog.setUniform("Material.Shininess", 5.0f);
+	////Cube
+	//prog.setUniform("Material.Ks", 0.95f, 0.95f, 0.95f);
+	//prog.setUniform("Material.Shininess", 50.0f);
+	//model = mat4(1.0f);
+	//model = glm::translate(model, vec3(0.0f, 0.0f, -1.0f));
+	//setMatrices();
+	//cube.render();
+
+	//Teapot
 	model = mat4(1.0f);
 	model = glm::translate(model, vec3(0.0f, 0.0f, -1.0f));
+	model = glm::rotate(model, glm::radians(45.0f), vec3(0.0f, 1.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
 	setMatrices();
-	cube.render();
-
-	////Teapot
-	//model = mat4(1.0f);
-	//model = glm::translate(model, vec3(0.0f, 0.0f, -8.0f));
-	//model = glm::rotate(model, glm::radians(45.0f), vec3(0.0f, 1.0f, 0.0f));
-	//model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
-	//setMatrices();
-	//teapot.render();
+	teapot.render();
 
 	////Donut
 	//prog.setUniform("Material.Kd", 0.2f, 0.55f, 0.9f);

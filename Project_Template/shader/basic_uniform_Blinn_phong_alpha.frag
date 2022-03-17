@@ -7,8 +7,8 @@ in vec3 Normal;
 in vec2 TexCoord;
 
 layout (location = 0) out vec4 FragColour;
-layout (binding = 0) uniform sampler2D BrickTex;
-layout (binding = 1) uniform sampler2D MossTex;
+layout (binding = 0) uniform sampler2D BaseTex;
+layout (binding = 1) uniform sampler2D AlphaTex;
 
 uniform struct LightInfo
 {
@@ -34,16 +34,15 @@ vec3 blinnPhong(vec3 position, vec3 n)
     
     vec3 s = normalize(((Light.Position).xyz - position)); //calculate s vector
 
-    vec4 brickTexColour = texture(BrickTex, TexCoord).rgba;
-    vec4 mossTexColour = texture(MossTex, TexCoord).rgba;
+    vec3 texColour = texture(BaseTex, TexCoord).rgb;
 
-    vec3 col = mix(brickTexColour.rgb, mossTexColour.rgb, mossTexColour.a);//change alpha to make weird (up = deepfry, down == smooth blend)
+   
 
-    vec3 ambient = Light.La * col; 
+    vec3 ambient = Light.La * texColour; 
     
     float sDotn = max(dot(s,n), 0.0f) ; //calculate dot product between s and n
     
-    vec3 diffuse = Light.Ld * col * sDotn; //calculate the diffuse
+    vec3 diffuse = Light.Ld * texColour * sDotn; //calculate the diffuse
         
     vec3 specular = vec3(0.0f);
     
@@ -61,6 +60,25 @@ vec3 blinnPhong(vec3 position, vec3 n)
 void main()
 {
 
-    FragColour = vec4(blinnPhong(Position.xyz, Normal),0.0f);
+    vec4 alphaMap = texture(AlphaTex, TexCoord).rgba;
+
+    if(alphaMap.a < 0.15)
+    {
+        discard;
+    }
+    else
+    {
+        if(gl_FrontFacing)
+        {
+            FragColour = vec4(blinnPhong(Position.xyz, Normal),1.0f);
+        }
+        else
+        {
+            FragColour = vec4(blinnPhong(Position.xyz, -Normal),1.0f);
+        }
+        
+    }
+
+    
     
 }
