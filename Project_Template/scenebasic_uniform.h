@@ -11,6 +11,7 @@
 #include "helper/plane.h"
 #include "helper/objmesh.h"
 #include "helper/cube.h"
+#include "helper/skybox.h"
 
 class SceneBasic_Uniform : public Scene
 {
@@ -21,10 +22,13 @@ private:
     //Plane plane;
     //Cube cube;
     //std::unique_ptr<ObjMesh> mesh;
-    std::unique_ptr<ObjMesh> ogre;
+    //std::unique_ptr<ObjMesh> ogre;
+    SkyBox sky;
 
     void setMatrices();
     void compile();
+
+    float angle, tPrev, rotSpeed;
     
 
 public:

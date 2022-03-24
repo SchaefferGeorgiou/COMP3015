@@ -125,6 +125,12 @@
     <None Include="shader\basic_uniform_Blinn_phong_normal_map.vert">
       <Filter>shaders</Filter>
     </None>
+    <None Include="shader\basic_uniform_Blinn_phong_skybox.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader\basic_uniform_Blinn_phong_skybox.vert">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="helper\scene.h">

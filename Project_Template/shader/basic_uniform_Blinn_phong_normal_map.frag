@@ -39,17 +39,11 @@ vec3 blinnPhong( vec3 n)
 
     vec3 ambient = Light.La * colour ; 
     
-
-    //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-    //THIS IS THE BITCH THAT IS MAKING LIFE DIFFICULT
-    float sDotn = max(dot(s,n), 0.0f) ; //calculate dot product between s and n
-
-    //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    float sDotn = max(dot(s,n),0.0f);
     
-    vec3 diffuse = vec3(0.0f);
+    //vec3 diffuse = vec3(0.0f);
 
-    diffuse = colour * vec3(sDotn); //calculate the diffuse
+    vec3 diffuse = colour * sDotn; //calculate the diffuse
         
     vec3 specular = vec3(0.0f);
     
@@ -60,7 +54,7 @@ vec3 blinnPhong( vec3 n)
         specular = Material.Ks * pow(max( dot(h,n), 0.0), Material.Shininess); 
     }     
 
-    return   diffuse;// + specular;
+    return  ambient + diffuse + specular;// + specular;
 }
 
 

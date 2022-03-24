@@ -22,12 +22,13 @@ using glm::vec3;
 using glm::mat4;
 
 
-SceneBasic_Uniform::SceneBasic_Uniform()
+SceneBasic_Uniform::SceneBasic_Uniform() : angle(0.0f), tPrev(0.0f), rotSpeed(glm::pi<float>() / 8.0f), sky(100.0f)
 {
 	//mesh = ObjMesh::load("../Project_Template/media/pig_triangulated.obj", true);
-	ogre = ObjMesh::load("../Project_Template/media/bs_ears.obj", true);
+	//ogre = ObjMesh::load("../Project_Template/media/bs_ears.obj",false, true);
 }
 
+////Multiple Light
 //void SceneBasic_Uniform::initScene()
 //{
 //    compile();
@@ -65,31 +66,50 @@ SceneBasic_Uniform::SceneBasic_Uniform()
 //	
 //	
 //}
+
+////Normal Map
+//void SceneBasic_Uniform::initScene()
+//{
+//	compile();
+//	glEnable(GL_DEPTH_TEST);
+//
+//	view = glm::lookAt(vec3(-1.0f, 0.25f, 2.0f),
+//					   vec3(0.0f, 0.0f, 0.0f),
+//					   vec3(0.0f, 1.0f, 0.0f));
+//
+//	projection = mat4(1.0f);
+//
+//	prog.setUniform("Light.Ld", vec3(1.0f,1.0f,1.0f));
+//	prog.setUniform("Light.La", vec3(0.2f,0.2f,0.2f)); 
+//
+//	GLuint diffuse = Texture::loadTexture("../Project_Template/media/texture/ogre_diffuse.png");
+//	GLuint normal = Texture::loadTexture("../Project_Template/media/texture/ogre_normalmap.png");
+//
+//	glActiveTexture(GL_TEXTURE0);
+//	glBindTexture(GL_TEXTURE_2D, diffuse);
+//
+//	glActiveTexture(GL_TEXTURE1);
+//	glBindTexture(GL_TEXTURE_2D, normal);
+//
+//	
+//	
+//}
+
 void SceneBasic_Uniform::initScene()
 {
 	compile();
 	glEnable(GL_DEPTH_TEST);
 
-	view = glm::lookAt(vec3(-1.0f, 0.25f, 2.0f),
-					   vec3(0.0f, 0.0f, 0.0f),
-					   vec3(0.0f, 1.0f, 0.0f));
-
 	projection = mat4(1.0f);
 
-	prog.setUniform("Light.Ld", vec3(1.0f,1.0f,1.0f));
-	prog.setUniform("Light.La", vec3(0.2f,0.2f,0.2f)); 
+	angle = glm::radians(90.0f); //set the initial angle
 
-	GLuint diffuse = Texture::loadTexture("../Project_Template/media/texture/ogre_diffuse.png");
-	GLuint normal = Texture::loadTexture("../Project_Template/media/texture/ogre_normalmap.png");
+	//extract the cube texture
+	GLuint cubeTex = Texture::loadHdrCubeMap("../Project_Template/media/texture/cube/pisahdr/pisa");
 
+	//activate and bindtexture
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, diffuse);
-
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, normal);
-
-	
-	
+	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeTex);
 }
 
 void SceneBasic_Uniform::compile()
@@ -122,14 +142,31 @@ void SceneBasic_Uniform::setMatrices()
 
 void SceneBasic_Uniform::update( float t )
 {
-	
-	//model = glm::rotate(model, glm::radians(0.4f * 2.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	//model = glm::rotate(model, glm::radians(0.4f * 2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	float deltaT = t - tPrev;
+	if (tPrev == 0.0f)
+		deltaT = 0.0f;
+	tPrev = t;
+	angle += rotSpeed * deltaT;
+	if (angle > glm::two_pi<float>())
+		angle -= glm::two_pi<float>();
 }
 
 void SceneBasic_Uniform::render()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glm::vec4 lightPos = glm::vec4(2.0f, 1.0f, 2.0f, 1.0f);
+	prog.setUniform("Light.Position", view * lightPos);
+
+
+	//Skybox
+	vec3 cameraPos = vec3(7.0f * cos(angle), 2.0f, 7.0f * sin(angle));
+	view = glm::lookAt(cameraPos, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+	// Draw sky
+	prog.use();
+	model = mat4(1.0f);
+	setMatrices();
+	sky.render();
 
 	//Piggy
 	//prog.setUniform("Material.Kd", 0.4f, 0.4f, 0.4f);
@@ -141,23 +178,17 @@ void SceneBasic_Uniform::render()
 	//setMatrices();
 	//mesh->render();
 
-
-	glm::vec4 lightPos = glm::vec4(2.0f, 1.0f, 2.0f,1.0f);
-	prog.setUniform("Light.Position", view * lightPos);
-
-	glm::mat3 normalMatrix = glm::mat3(vec3(view[0]), vec3(view[1]), vec3(view[2]));
+	//glm::mat3 normalMatrix = glm::mat3(vec3(view[0]), vec3(view[1]), vec3(view[2]));
 	//prog.setUniform("Light.Direction", normalMatrix * vec3(-lightPos));
 
-	//Ogre
-	prog.setUniform("Material.Kd", 0.4f, 0.4f, 0.4f);
-	prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
-	prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
-	prog.setUniform("Material.Shininess", 120.0f);
-	model = mat4(1.0f);
-	setMatrices();
-	ogre->render();
-	
-
+	////Ogre
+	//prog.setUniform("Material.Kd", 0.4f, 0.4f, 0.4f);
+	//prog.setUniform("Material.Ks", 0.7f, 0.7f, 0.7f);
+	//prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
+	//prog.setUniform("Material.Shininess", 2000.0f);
+	//model = mat4(1.0f);
+	//setMatrices();
+	//ogre->render();
 	
 	////Cube
 	//prog.setUniform("Material.Ks", 0.95f, 0.95f, 0.95f);
