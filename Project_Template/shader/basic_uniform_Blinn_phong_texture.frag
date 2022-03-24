@@ -49,15 +49,11 @@ vec3 blinnPhong(vec3 position, vec3 n)
         specular = Material.Ks * pow(max( dot(h,n), 0.0), Material.Shininess); 
     }     
 
-    return  diffuse ;//+ specular;
+    return  ambient +  diffuse + specular;
 }
 
 
 void main()
 {
-
-
-
-    FragColour = vec4(blinnPhong(Position.xyz, Normal),0.0f);
-    
+    FragColour = vec4(blinnPhong(Position.xyz, Normal),0.0f);    
 }

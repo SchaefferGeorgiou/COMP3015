@@ -105,7 +105,7 @@ void SceneBasic_Uniform::initScene()
 	angle = glm::radians(90.0f); //set the initial angle
 
 	//extract the cube texture
-	GLuint cubeTex = Texture::loadHdrCubeMap("../Project_Template/media/texture/cube/pisahdr/pisa");
+	GLuint cubeTex = Texture::loadHdrCubeMap("../Project_Template/media/texture/cube/pisa-hdr/pisa");
 
 	//activate and bindtexture
 	glActiveTexture(GL_TEXTURE0);
@@ -115,8 +115,8 @@ void SceneBasic_Uniform::initScene()
 void SceneBasic_Uniform::compile()
 {
 	try {
-		prog.compileShader("shader/basic_uniform_Blinn_phong_normal_map.vert");
-		prog.compileShader("shader/basic_uniform_Blinn_phong_normal_map.frag");
+		prog.compileShader("shader/basic_uniform_Blinn_phong_skybox.vert");
+		prog.compileShader("shader/basic_uniform_Blinn_phong_skybox.frag");
 
 
 		prog.link();
@@ -144,11 +144,16 @@ void SceneBasic_Uniform::update( float t )
 {
 	float deltaT = t - tPrev;
 	if (tPrev == 0.0f)
+	{
 		deltaT = 0.0f;
+	}		
 	tPrev = t;
 	angle += rotSpeed * deltaT;
 	if (angle > glm::two_pi<float>())
+	{
 		angle -= glm::two_pi<float>();
+	}
+		
 }
 
 void SceneBasic_Uniform::render()
@@ -157,6 +162,8 @@ void SceneBasic_Uniform::render()
 
 	glm::vec4 lightPos = glm::vec4(2.0f, 1.0f, 2.0f, 1.0f);
 	prog.setUniform("Light.Position", view * lightPos);
+	prog.setUniform("Light.La", vec3(0.2f, 0.2f, 0.2f));
+	prog.setUniform("Light.Ld", vec3(0.2f, 0.2f, 0.2f));
 
 
 	//Skybox

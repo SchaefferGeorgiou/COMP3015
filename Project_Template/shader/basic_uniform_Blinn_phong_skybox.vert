@@ -32,6 +32,7 @@ uniform mat4 MVP;
 
 void main()
 {
+    Vertices = VertexPosition;
 
     gl_Position = MVP * vec4(VertexPosition,1.0);
 

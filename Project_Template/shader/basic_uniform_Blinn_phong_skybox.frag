@@ -30,27 +30,12 @@ uniform struct MaterialInfo
 
 
 
-vec3 blinnPhong() 
-{
-
-    
-    
-
-    vec3 ambient = Light.La ; 
-        
-   
-
-    return  ambient;// + diffuse + specular;// + specular;
-}
-
 
 void main()
 {
 
-    vec3 texColor = texture(SkyboxTex, normalize(Vertices)).rgb;
+    vec3 texColour = texture(SkyboxTex, normalize(Vertices)).rgb;
 
-    FragColour = vec4(texColor,1.0f);  
-
-    
+    FragColour = vec4(texColour,1.0f);    
     
 }
