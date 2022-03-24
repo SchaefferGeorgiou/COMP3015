@@ -96,7 +96,7 @@ void SceneBasic_Uniform::compile()
 {
 	try {
 		prog.compileShader("shader/basic_uniform_Blinn_phong_normal_map.vert");
-		prog.compileShader("shader/basic_uniform_Blinn_phong_texture.frag");
+		prog.compileShader("shader/basic_uniform_Blinn_phong_normal_map.frag");
 
 
 		prog.link();
@@ -114,7 +114,8 @@ void SceneBasic_Uniform::setMatrices()
 	prog.setUniform("ModelViewMatrix", mv);
 
 	prog.setUniform("NormalMatrix", glm::mat3(vec3(mv[0]),
-		vec3(mv[1]), vec3(mv[2])));
+									vec3(mv[1]),
+									vec3(mv[2])));
 
 	prog.setUniform("MVP", projection * mv);
 }
@@ -145,15 +146,14 @@ void SceneBasic_Uniform::render()
 	prog.setUniform("Light.Position", view * lightPos);
 
 	glm::mat3 normalMatrix = glm::mat3(vec3(view[0]), vec3(view[1]), vec3(view[2]));
-	/*prog.setUniform("Light.Direction", normalMatrix * vec3(-lightPos));*/
+	//prog.setUniform("Light.Direction", normalMatrix * vec3(-lightPos));
 
 	//Ogre
-	prog.setUniform("Material.Kd", 0.9f, 0.4f, 0.4f);
+	prog.setUniform("Material.Kd", 0.4f, 0.4f, 0.4f);
 	prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
 	prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
-	prog.setUniform("Material.Shininess", 0.5f);
+	prog.setUniform("Material.Shininess", 120.0f);
 	model = mat4(1.0f);
-	
 	setMatrices();
 	ogre->render();
 	

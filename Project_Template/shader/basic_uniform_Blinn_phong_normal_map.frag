@@ -1,13 +1,13 @@
 #version 430
 
 
-in vec3 LightDir;
 in vec2 TexCoord;
+in vec3 LightDir;
 in vec3 ViewDir;
 
 
 layout (location = 0) out vec4 FragColour;
-layout(binding=0) uniform sampler2D ColorTex;
+layout(binding=0) uniform sampler2D ColourTex;
 layout(binding=1) uniform sampler2D NormalMapTex;
 
 uniform struct LightInfo
@@ -28,18 +28,28 @@ uniform struct MaterialInfo
 
 }Material;
 
+
+
 vec3 blinnPhong( vec3 n) 
 {
 
-    vec3 s = normalize(LightDir); //calculate s vector
+    vec3 s = LightDir; //calculate s vector
     
-    vec3 colour = texture(ColorTex, TexCoord).rgb;
+    vec3 colour = texture(ColourTex, TexCoord).rgb;
 
     vec3 ambient = Light.La * colour ; 
     
+
+    //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+    //THIS IS THE BITCH THAT IS MAKING LIFE DIFFICULT
     float sDotn = max(dot(s,n), 0.0f) ; //calculate dot product between s and n
+
+    //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     
-    vec3 diffuse = colour * sDotn; //calculate the diffuse
+    vec3 diffuse = vec3(0.0f);
+
+    diffuse = colour * vec3(sDotn); //calculate the diffuse
         
     vec3 specular = vec3(0.0f);
     
@@ -50,14 +60,14 @@ vec3 blinnPhong( vec3 n)
         specular = Material.Ks * pow(max( dot(h,n), 0.0), Material.Shininess); 
     }     
 
-    return  diffuse;// + specular;
+    return   diffuse;// + specular;
 }
 
 
 void main()
 {
 
-    vec3 norm = texture(NormalMapTex, TexCoord).xyz;
+    vec3 norm = texture(NormalMapTex, TexCoord).rgb;
                         norm.xy = 2.0 * norm.xy - 1.0;
 
     FragColour = vec4(blinnPhong(norm),1.0f);  

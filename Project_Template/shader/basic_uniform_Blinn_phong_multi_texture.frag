@@ -12,7 +12,7 @@ layout (binding = 1) uniform sampler2D MossTex;
 
 uniform struct LightInfo
 {
-    vec3 Position;
+    vec4 Position;
     vec3 La;
     vec3 Ld;  
     

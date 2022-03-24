@@ -17,6 +17,16 @@ uniform struct LightInfo
     
 }Light;
 
+uniform struct MaterialInfo
+{
+    vec3 Ka;
+    vec3 Kd;
+    vec3 Ks;
+    float Shininess;
+
+}Material;
+
+
 
 uniform mat4 ModelViewMatrix;
 uniform mat3 NormalMatrix;
