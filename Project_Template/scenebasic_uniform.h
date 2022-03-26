@@ -5,6 +5,7 @@
 
 #include <glad/glad.h>
 #include "helper/glslprogram.h"
+#include "helper/objmesh.h"
 
 class SceneBasic_Uniform : public Scene
 {
@@ -12,6 +13,10 @@ private:
     GLuint vaoHandle;
     GLSLProgram prog;
     float angle;
+    ObjMesh theShape;
+    ObjMesh rock;
+
+
 
     void compile();
 

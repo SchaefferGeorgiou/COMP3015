@@ -14,7 +14,10 @@ using std::endl;
 
 using glm::vec3;
 
-SceneBasic_Uniform::SceneBasic_Uniform() : angle(0.0f) {}
+SceneBasic_Uniform::SceneBasic_Uniform() : angle(0.0f)
+{
+    
+}
 
 void SceneBasic_Uniform::initScene()
 {
@@ -91,7 +94,7 @@ void SceneBasic_Uniform::update( float t )
 
 void SceneBasic_Uniform::render()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     //create the rotation matrix here and update the uniform in the shader 
 
