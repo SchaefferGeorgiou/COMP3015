@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\Dependencies\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Dependencies\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Dependencies\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Dependencies\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -146,60 +146,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="glad.c" />
-    <ClCompile Include="helper\cube.cpp" />
     <ClCompile Include="helper\glslprogram.cpp" />
     <ClCompile Include="helper\glutils.cpp" />
-    <ClCompile Include="helper\objmesh.cpp" />
-    <ClCompile Include="helper\plane.cpp" />
-    <ClCompile Include="helper\skybox.cpp" />
-    <ClCompile Include="helper\stb\stb_image.cpp" />
-    <ClCompile Include="helper\teapot.cpp" />
-    <ClCompile Include="helper\texture.cpp" />
-    <ClCompile Include="helper\torus.cpp" />
-    <ClCompile Include="helper\trianglemesh.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="scenebasic_uniform.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader\basic_uniform_Blinn_phong_alpha.frag" />
-    <None Include="shader\basic_uniform_Blinn_phong_fog.frag" />
-    <None Include="shader\basic_uniform_Blinn_phong_fog.vert" />
-    <None Include="shader\basic_uniform_Blinn_phong_multi_texture.frag" />
-    <None Include="shader\basic_uniform_Blinn_phong_normal_map.frag" />
-    <None Include="shader\basic_uniform_Blinn_phong_normal_map.vert" />
-    <None Include="shader\basic_uniform_Blinn_phong_skybox.frag" />
-    <None Include="shader\basic_uniform_Blinn_phong_skybox.vert" />
-    <None Include="shader\basic_uniform_Blinn_phong_spotlight.frag" />
-    <None Include="shader\basic_uniform_Blinn_phong_spotlight.vert" />
-    <None Include="shader\basic_uniform_Blinn_phong_texture.frag" />
-    <None Include="shader\basic_uniform_Blinn_phong_texture.vert" />
-    <None Include="shader\basic_uniform_Blinn_phong_toon.frag" />
-    <None Include="shader\basic_uniform_Blinn_phong_toon.vert" />
-    <None Include="shader\basic_uniform_diffuse.frag" />
-    <None Include="shader\basic_uniform_diffuse.vert" />
-    <None Include="shader\basic_uniform_phong.frag" />
-    <None Include="shader\basic_uniform_phong.vert" />
-    <None Include="shader\basic_uniform_phong_multiple.frag" />
-    <None Include="shader\basic_uniform_phong_multiple.vert" />
+    <None Include="shader\basic_uniform.frag" />
+    <None Include="shader\basic_uniform.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="helper\aabb.h" />
-    <ClInclude Include="helper\cube.h" />
-    <ClInclude Include="helper\drawable.h" />
     <ClInclude Include="helper\glslprogram.h" />
     <ClInclude Include="helper\glutils.h" />
-    <ClInclude Include="helper\objmesh.h" />
-    <ClInclude Include="helper\plane.h" />
     <ClInclude Include="helper\scene.h" />
     <ClInclude Include="helper\scenerunner.h" />
-    <ClInclude Include="helper\skybox.h" />
     <ClInclude Include="helper\stb\stb_image.h" />
     <ClInclude Include="helper\stb\stb_image_write.h" />
-    <ClInclude Include="helper\teapot.h" />
-    <ClInclude Include="helper\teapotdata.h" />
-    <ClInclude Include="helper\texture.h" />
-    <ClInclude Include="helper\torus.h" />
-    <ClInclude Include="helper\trianglemesh.h" />
     <ClInclude Include="scenebasic_uniform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

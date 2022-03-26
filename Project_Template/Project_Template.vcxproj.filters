@@ -30,6 +30,9 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="helper\glutils.cpp">
       <Filter>helper</Filter>
     </ClCompile>
@@ -39,96 +42,12 @@
     <ClCompile Include="scenebasic_uniform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="helper\teapot.cpp">
-      <Filter>helper</Filter>
-    </ClCompile>
-    <ClCompile Include="helper\torus.cpp">
-      <Filter>helper</Filter>
-    </ClCompile>
-    <ClCompile Include="helper\trianglemesh.cpp">
-      <Filter>helper</Filter>
-    </ClCompile>
-    <ClCompile Include="glad.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="helper\objmesh.cpp">
-      <Filter>helper</Filter>
-    </ClCompile>
-    <ClCompile Include="helper\plane.cpp">
-      <Filter>helper</Filter>
-    </ClCompile>
-    <ClCompile Include="helper\cube.cpp">
-      <Filter>helper</Filter>
-    </ClCompile>
-    <ClCompile Include="helper\skybox.cpp">
-      <Filter>helper</Filter>
-    </ClCompile>
-    <ClCompile Include="helper\texture.cpp">
-      <Filter>helper</Filter>
-    </ClCompile>
-    <ClCompile Include="helper\stb\stb_image.cpp">
-      <Filter>helper\stb</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader\basic_uniform_diffuse.frag">
+    <None Include="shader\basic_uniform.frag">
       <Filter>shaders</Filter>
     </None>
-    <None Include="shader\basic_uniform_diffuse.vert">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shader\basic_uniform_phong.frag">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shader\basic_uniform_phong.vert">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shader\basic_uniform_phong_multiple.frag">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shader\basic_uniform_phong_multiple.vert">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shader\basic_uniform_Blinn_phong_spotlight.frag">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shader\basic_uniform_Blinn_phong_spotlight.vert">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shader\basic_uniform_Blinn_phong_toon.frag">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shader\basic_uniform_Blinn_phong_toon.vert">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shader\basic_uniform_Blinn_phong_fog.frag">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shader\basic_uniform_Blinn_phong_fog.vert">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shader\basic_uniform_Blinn_phong_texture.frag">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shader\basic_uniform_Blinn_phong_texture.vert">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shader\basic_uniform_Blinn_phong_multi_texture.frag">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shader\basic_uniform_Blinn_phong_alpha.frag">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shader\basic_uniform_Blinn_phong_normal_map.frag">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shader\basic_uniform_Blinn_phong_normal_map.vert">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shader\basic_uniform_Blinn_phong_skybox.frag">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shader\basic_uniform_Blinn_phong_skybox.vert">
+    <None Include="shader\basic_uniform.vert">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>
@@ -138,6 +57,9 @@
     </ClInclude>
     <ClInclude Include="helper\scenerunner.h">
       <Filter>helper</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\stb\stb_image.h">
+      <Filter>helper\stb</Filter>
     </ClInclude>
     <ClInclude Include="helper\stb\stb_image_write.h">
       <Filter>helper\stb</Filter>
@@ -150,42 +72,6 @@
     </ClInclude>
     <ClInclude Include="scenebasic_uniform.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="helper\drawable.h">
-      <Filter>helper</Filter>
-    </ClInclude>
-    <ClInclude Include="helper\teapot.h">
-      <Filter>helper</Filter>
-    </ClInclude>
-    <ClInclude Include="helper\teapotdata.h">
-      <Filter>helper</Filter>
-    </ClInclude>
-    <ClInclude Include="helper\torus.h">
-      <Filter>helper</Filter>
-    </ClInclude>
-    <ClInclude Include="helper\trianglemesh.h">
-      <Filter>helper</Filter>
-    </ClInclude>
-    <ClInclude Include="helper\aabb.h">
-      <Filter>helper</Filter>
-    </ClInclude>
-    <ClInclude Include="helper\objmesh.h">
-      <Filter>helper</Filter>
-    </ClInclude>
-    <ClInclude Include="helper\plane.h">
-      <Filter>helper</Filter>
-    </ClInclude>
-    <ClInclude Include="helper\cube.h">
-      <Filter>helper</Filter>
-    </ClInclude>
-    <ClInclude Include="helper\skybox.h">
-      <Filter>helper</Filter>
-    </ClInclude>
-    <ClInclude Include="helper\texture.h">
-      <Filter>helper</Filter>
-    </ClInclude>
-    <ClInclude Include="helper\stb\stb_image.h">
-      <Filter>helper\stb</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

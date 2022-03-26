@@ -5,31 +5,15 @@
 
 #include <glad/glad.h>
 #include "helper/glslprogram.h"
-#include "helper/torus.h"
-#include "helper/teapot.h"
-
-#include "helper/plane.h"
-#include "helper/objmesh.h"
-#include "helper/cube.h"
-#include "helper/skybox.h"
 
 class SceneBasic_Uniform : public Scene
 {
 private:
+    GLuint vaoHandle;
     GLSLProgram prog;
-    //Torus torus;
-    //Teapot teapot;
-    //Plane plane;
-    //Cube cube;
-    //std::unique_ptr<ObjMesh> mesh;
-    //std::unique_ptr<ObjMesh> ogre;
-    SkyBox sky;
+    float angle;
 
-    void setMatrices();
     void compile();
-
-    float angle, tPrev, rotSpeed;
-    
 
 public:
     SceneBasic_Uniform();
