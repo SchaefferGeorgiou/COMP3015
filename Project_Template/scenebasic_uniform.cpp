@@ -11,67 +11,27 @@ using std::cerr;
 using std::endl;
 
 #include "helper/glutils.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 using glm::vec3;
+using glm::mat4;
 
-SceneBasic_Uniform::SceneBasic_Uniform() : angle(0.0f)
+SceneBasic_Uniform::SceneBasic_Uniform() : angle(0.0f), tPrev(0.0f), rotSpeed(glm::pi<float>() / 8.0f)
 {
-    
+    centrePiece = ObjMesh::load("../Project_Template/media/centrePiece.obj", true);
+    //rock = ObjMesh::load("../Project_Template/media/Rock.obj", false, true);
+
 }
 
 void SceneBasic_Uniform::initScene()
 {
     compile();
 
-    std::cout << std::endl;
+    glEnable(GL_DEPTH_TEST);
 
-    prog.printActiveUniforms();
+    setLights();
 
-    /////////////////// Create the VBO ////////////////////
-    float positionData[] = {
-        -0.8f, -0.8f, 0.0f,
-         0.8f, -0.8f, 0.0f,
-         0.0f,  0.8f, 0.0f };
-    float colorData[] = {
-        1.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 1.0f };
-
-    // Create and populate the buffer objects
-    GLuint vboHandles[2];
-    glGenBuffers(2, vboHandles);
-    GLuint positionBufferHandle = vboHandles[0];
-    GLuint colorBufferHandle = vboHandles[1];
-
-    glBindBuffer(GL_ARRAY_BUFFER, positionBufferHandle);
-    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), positionData, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ARRAY_BUFFER, colorBufferHandle);
-    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), colorData, GL_STATIC_DRAW);
-
-    // Create and set-up the vertex array object
-    glGenVertexArrays( 1, &vaoHandle );
-    glBindVertexArray(vaoHandle);
-
-    glEnableVertexAttribArray(0);  // Vertex position
-    glEnableVertexAttribArray(1);  // Vertex color
-
-    #ifdef __APPLE__
-        glBindBuffer(GL_ARRAY_BUFFER, positionBufferHandle);
-        glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte *)NULL );
-
-        glBindBuffer(GL_ARRAY_BUFFER, colorBufferHandle);
-        glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte *)NULL );
-    #else
-    		glBindVertexBuffer(0, positionBufferHandle, 0, sizeof(GLfloat)*3);
-    		glBindVertexBuffer(1, colorBufferHandle, 0, sizeof(GLfloat)*3);
-
-    		glVertexAttribFormat(0, 3, GL_FLOAT, GL_FALSE, 0);
-    		glVertexAttribBinding(0, 0);
-    		glVertexAttribFormat(1, 3, GL_FLOAT, GL_FALSE, 0);
-    	  glVertexAttribBinding(1, 1);
-    #endif
-    glBindVertexArray(0);
 }
 
 void SceneBasic_Uniform::compile()
@@ -87,6 +47,19 @@ void SceneBasic_Uniform::compile()
 	}
 }
 
+void SceneBasic_Uniform::setMatrices()
+{
+    mat4 mv = view * model;
+
+    prog.setUniform("ModelViewMatrix", mv);
+
+    prog.setUniform("NormalMatrix", glm::mat3(vec3(mv[0]),
+                                              vec3(mv[1]),
+                                              vec3(mv[2])));
+
+    prog.setUniform("MVP", projection * mv);
+}
+
 void SceneBasic_Uniform::update( float t )
 {
 	//update your angle here
@@ -96,17 +69,53 @@ void SceneBasic_Uniform::render()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    //create the rotation matrix here and update the uniform in the shader 
+    prog.setUniform("Material.Kd", 0.4f, 0.4f, 0.4f);
+    prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
+    prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
+    prog.setUniform("Material.Shininess", 120.0f);
+    model = mat4(1.0f);
+    setMatrices();
+    centrePiece->render();
 
-    glBindVertexArray(vaoHandle);
-    glDrawArrays(GL_TRIANGLES, 0, 3 );
-
-    glBindVertexArray(0);
+    
 }
 
 void SceneBasic_Uniform::resize(int w, int h)
 {
+    glViewport(0, 0, w, h);
     width = w;
     height = h;
-    glViewport(0,0,w,h);
+    projection = glm::perspective(glm::radians(70.0f), (float)w / h, 0.3f, 100.0f);
+}
+
+void SceneBasic_Uniform::setLights()
+{
+    glm::mat3 normalMatrix = glm::mat3(vec3(view[0]), vec3(view[1]), vec3(view[2]));
+
+    //Right
+    glm::vec4 lightPos = glm::vec4(2.0f, 1.0f, 2.0f, 1.0f);
+    prog.setUniform("Lights[0].Position", view * lightPos);
+    prog.setUniform("Lights[0].La", vec3(0.2f, 0.0f, 0.0f));
+    prog.setUniform("Lights[0].Ld", vec3(0.7f, 0.0f, 0.0f));
+    prog.setUniform("Lights[0].Direction", normalMatrix * vec3(-lightPos));
+    prog.setUniform("Lights[0].Exponent", 50.0f);
+    prog.setUniform("Lights[0].Cutoff", glm::radians(15.0f));
+
+    ////Left
+    //lightPos = glm::vec4(-2.0f, 1.0f, 2.0f, 1.0f);
+    //prog.setUniform("Lights[1].Position", view * lightPos);
+    //prog.setUniform("Lights[1].La", vec3(0.0f, 0.2f, 0.0f));
+    //prog.setUniform("Lights[1].Ld", vec3(0.0f, 0.7f, 0.0f));
+    //prog.setUniform("Lights[1].Direction", normalMatrix * vec3(-lightPos));
+    //prog.setUniform("Lights[1].Exponent", 50.0f);
+    //prog.setUniform("Lights[1].Cutoff", glm::radians(15.0f));
+
+    ////Centre
+    //lightPos = glm::vec4(0.0f, 1.0f, -2.0f, 1.0f);
+    //prog.setUniform("Lights[2].Position", view * lightPos);
+    //prog.setUniform("Lights[2].La", vec3(0.0f, 0.0f, 0.2f));
+    //prog.setUniform("Lights[2].Ld", vec3(0.0f, 0.0f, 0.7f));
+    //prog.setUniform("Lights[2].Direction", normalMatrix * vec3(-lightPos));
+    //prog.setUniform("Lights[2].Exponent", 50.0f);
+    //prog.setUniform("Lights[2].Cutoff", glm::radians(15.0f));
 }

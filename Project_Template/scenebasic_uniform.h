@@ -12,13 +12,15 @@ class SceneBasic_Uniform : public Scene
 private:
     GLuint vaoHandle;
     GLSLProgram prog;
-    float angle;
-    ObjMesh theShape;
-    ObjMesh rock;
+    std::unique_ptr<ObjMesh> centrePiece;
+    //std::unique_ptr<ObjMesh> rock;
 
 
-
+    void setMatrices();
     void compile();
+    void setLights();
+
+    float angle, tPrev, rotSpeed;
 
 public:
     SceneBasic_Uniform();

@@ -85,9 +85,6 @@
     <ClInclude Include="helper\objmesh.h">
       <Filter>helper</Filter>
     </ClInclude>
-    <ClInclude Include="helper\texture.h">
-      <Filter>helper</Filter>
-    </ClInclude>
     <ClInclude Include="helper\trianglemesh.h">
       <Filter>helper</Filter>
     </ClInclude>
@@ -95,6 +92,12 @@
       <Filter>helper</Filter>
     </ClInclude>
     <ClInclude Include="helper\drawable.h">
+      <Filter>helper</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\utils.h">
+      <Filter>helper</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\texture.h">
       <Filter>helper</Filter>
     </ClInclude>
   </ItemGroup>
