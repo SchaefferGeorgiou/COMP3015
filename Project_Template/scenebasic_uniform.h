@@ -6,21 +6,27 @@
 #include <glad/glad.h>
 #include "helper/glslprogram.h"
 #include "helper/objmesh.h"
+#include "helper/plane.h"
 
 class SceneBasic_Uniform : public Scene
 {
 private:
-    GLuint vaoHandle;
     GLSLProgram prog;
+    Plane plane;
     std::unique_ptr<ObjMesh> centrePiece;
-    //std::unique_ptr<ObjMesh> rock;
-
+    std::unique_ptr<ObjMesh> rock;
 
     void setMatrices();
     void compile();
-    void setLights();
 
-    float angle, tPrev, rotSpeed;
+    void setLights();
+    void setFog();
+
+    float alphaCutoff, speed;
+
+    bool direction, dissolve;
+
+    GLuint tex1, tex2, tex3;
 
 public:
     SceneBasic_Uniform();

@@ -25,6 +25,12 @@
     <Filter Include="helper\stb">
       <UniqueIdentifier>{2eeab77b-5d84-4893-b9df-1b2ed789b189}</UniqueIdentifier>
     </Filter>
+    <Filter Include="helper\Headers">
+      <UniqueIdentifier>{45959f3f-6de2-4d9c-944a-7d4839c787cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="helper\cpp">
+      <UniqueIdentifier>{1e20f6f1-6130-4515-972e-37a5d121f7f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -33,23 +39,29 @@
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="helper\glutils.cpp">
-      <Filter>helper</Filter>
-    </ClCompile>
-    <ClCompile Include="helper\glslprogram.cpp">
-      <Filter>helper</Filter>
-    </ClCompile>
     <ClCompile Include="scenebasic_uniform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="helper\objmesh.cpp">
-      <Filter>helper</Filter>
+    <ClCompile Include="helper\glslprogram.cpp">
+      <Filter>helper\cpp</Filter>
     </ClCompile>
-    <ClCompile Include="helper\texture.cpp">
-      <Filter>helper</Filter>
+    <ClCompile Include="helper\plane.cpp">
+      <Filter>helper\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="helper\objmesh.cpp">
+      <Filter>helper\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="helper\glutils.cpp">
+      <Filter>helper\cpp</Filter>
     </ClCompile>
     <ClCompile Include="helper\trianglemesh.cpp">
-      <Filter>helper</Filter>
+      <Filter>helper\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="helper\texture.cpp">
+      <Filter>helper\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="helper\stb\stb_image.cpp">
+      <Filter>helper\stb</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -61,44 +73,47 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="helper\scene.h">
-      <Filter>helper</Filter>
-    </ClInclude>
-    <ClInclude Include="helper\scenerunner.h">
-      <Filter>helper</Filter>
-    </ClInclude>
-    <ClInclude Include="helper\stb\stb_image.h">
-      <Filter>helper\stb</Filter>
-    </ClInclude>
     <ClInclude Include="helper\stb\stb_image_write.h">
       <Filter>helper\stb</Filter>
-    </ClInclude>
-    <ClInclude Include="helper\glutils.h">
-      <Filter>helper</Filter>
-    </ClInclude>
-    <ClInclude Include="helper\glslprogram.h">
-      <Filter>helper</Filter>
     </ClInclude>
     <ClInclude Include="scenebasic_uniform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="helper\objmesh.h">
-      <Filter>helper</Filter>
-    </ClInclude>
-    <ClInclude Include="helper\trianglemesh.h">
-      <Filter>helper</Filter>
-    </ClInclude>
     <ClInclude Include="helper\aabb.h">
-      <Filter>helper</Filter>
+      <Filter>helper\Headers</Filter>
     </ClInclude>
     <ClInclude Include="helper\drawable.h">
-      <Filter>helper</Filter>
+      <Filter>helper\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\glslprogram.h">
+      <Filter>helper\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\glutils.h">
+      <Filter>helper\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\objmesh.h">
+      <Filter>helper\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\plane.h">
+      <Filter>helper\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\scene.h">
+      <Filter>helper\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\scenerunner.h">
+      <Filter>helper\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\trianglemesh.h">
+      <Filter>helper\Headers</Filter>
     </ClInclude>
     <ClInclude Include="helper\utils.h">
-      <Filter>helper</Filter>
+      <Filter>helper\Headers</Filter>
     </ClInclude>
     <ClInclude Include="helper\texture.h">
-      <Filter>helper</Filter>
+      <Filter>helper\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\stb\stb_image.h">
+      <Filter>helper\stb</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

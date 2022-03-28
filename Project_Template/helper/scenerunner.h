@@ -58,7 +58,7 @@ public:
         GLUtils::dumpGLInfo();
 
         // Initialization
-        glClearColor(0.5f,0.5f,0.5f,1.0f);
+        glClearColor(0.1f,0.1f,0.1f,1.0f);
 #ifndef __APPLE__
 		if (debug) {
 			glDebugMessageCallback(GLUtils::debugCallback, nullptr);
@@ -128,6 +128,8 @@ private:
 			int state = glfwGetKey(window, GLFW_KEY_SPACE);
 			if (state == GLFW_PRESS)
 				scene.animate(!scene.animating());
+
+            std::cin;
         }
     }
 };
