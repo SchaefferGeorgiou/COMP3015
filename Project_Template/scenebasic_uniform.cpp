@@ -47,13 +47,6 @@ void SceneBasic_Uniform::initScene()
 
     projection = mat4(1.0f);
 
-
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, tex2);
-
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, tex1);
-
 }
 
 void SceneBasic_Uniform::compile()
@@ -85,6 +78,7 @@ void SceneBasic_Uniform::setMatrices()
 void SceneBasic_Uniform::update( float t )
 {
     
+    //Increase or decrease cutoff based on range
     if (!dissolve)
     {
         alphaCutoff -= speed * 0.02f;
@@ -104,14 +98,11 @@ void SceneBasic_Uniform::update( float t )
         }
     }
     
-    prog.setUniform("AlphaCutoff", alphaCutoff);
+    prog.setUniform("AlphaCutoff", alphaCutoff);//Update alpha
 
-    model = glm::rotate(model, glm::radians( t * 24.0f), vec3(0.0f, 1.0f, 0.0f));//rotates
+    model = glm::rotate(model, glm::radians( t * 24.0f), vec3(0.0f, 1.0f, 0.0f));//rotate thingy
 
-    
-
-
-    view = glm::translate(view, vec3(0.0f, 0.0f, speed * 0.02f));
+    view = glm::translate(view, vec3(0.0f, 0.0f, speed * 0.02f));//Move camera
     
 }
 
@@ -127,6 +118,7 @@ void SceneBasic_Uniform::render()
     setLights();
     setFog();
 
+    //Tex 1
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tex3);
 
@@ -136,14 +128,14 @@ void SceneBasic_Uniform::render()
     //Thingy
     prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
     prog.setUniform("Material.Shininess", 200.0f);
-    
     model = glm::scale(model, vec3(0.6f));
     model = glm::translate(model, vec3(0.0f, 5.0f, 0.0f));
-
     setMatrices();
     centrePiece->render();
 
     //Rocks
+
+    //Medium
     prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
     prog.setUniform("Material.Shininess", 120.0f);
     model = mat4(1.0f);
@@ -151,6 +143,7 @@ void SceneBasic_Uniform::render()
     setMatrices();
     rock->render();
 
+    //Medium
     model = mat4(1.0f);
     model = glm::translate(model, vec3(-3.0f, 0.0f, -1.0f));
     model = glm::rotate(model, glm::radians(60.0f), vec3(0.2f, 0.5f, 0.3f));
@@ -173,15 +166,13 @@ void SceneBasic_Uniform::render()
     setMatrices();
     rock->render();
 
-
-
     //Plane
     prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
     prog.setUniform("Material.Shininess", 180.0f);
     model = mat4(1.0f);
     setMatrices();
 
-
+    //Tex 2
     //rebind before drawing
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tex2);
@@ -205,8 +196,6 @@ void SceneBasic_Uniform::setLights()
     //1
     glm::mat3 normalMatrix = glm::mat3(vec3(view[0]), vec3(view[1]), vec3(view[2]));
     glm::vec4 lightPos = glm::vec4(0.0f, 25.0f, -15.0f, 1.0f);
-
-    
 
     prog.setUniform("Lights[0].Position", view * lightPos);
     prog.setUniform("Lights[0].La", vec3(0.06f, 0.06f, 0.06f));//0.066 (0.2/3) so that ambient doesn't stack too much
@@ -238,5 +227,5 @@ void SceneBasic_Uniform::setFog()
 {
     prog.setUniform("Fog.MaxDist", 11.0f);
     prog.setUniform("Fog.MinDist", 10.0f);
-    prog.setUniform("Fog.Colour", vec3(0.15f));
+    prog.setUniform("Fog.Colour", vec3(0.15f));//Brighter than ambient so visuals can be seen
 }
