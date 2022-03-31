@@ -11,6 +11,7 @@ layout (location = 0) out vec4 FragColour;
 
 uniform float EdgeThreshold;
 uniform int Pass;
+uniform vec3 Change;
 
 uniform struct LightInfo
 {
@@ -86,7 +87,7 @@ vec4 pass2()
      if( g > EdgeThreshold )
      return vec4(1.0); //edge
      else
-     return vec4(0.0,0.0,0.0,1.0); //no edge
+     return vec4(Change,1.0f); //no edge
 }
 
 

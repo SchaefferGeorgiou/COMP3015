@@ -167,6 +167,8 @@
     <None Include="shader\basic_uniform_Blinn_phong_edge_detection.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_fog.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_fog.vert" />
+    <None Include="shader\basic_uniform_Blinn_phong_gaussian_blur.frag" />
+    <None Include="shader\basic_uniform_Blinn_phong_gaussian_blur.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_multi_texture.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_normal_map.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_normal_map.vert" />

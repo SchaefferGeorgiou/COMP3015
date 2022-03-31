@@ -23,17 +23,22 @@ private:
     //Cube cube;
     //std::unique_ptr<ObjMesh> mesh;
     //std::unique_ptr<ObjMesh> ogre;
-    SkyBox sky;
+    //SkyBox sky;
 
     void setMatrices();
     void compile();
 
     float angle, tPrev, rotSpeed;
-    GLuint fsQuad, fboHandle, renderTex;
+    GLuint fsQuad;
+    GLuint renderFBO, intermediateFBO;
+    GLuint renderTex, intermediateTex;
+
 
     void setupFBO();
     void pass1();
     void pass2();
+    void pass3();
+    float gauss(float, float);
     
 
 public:
