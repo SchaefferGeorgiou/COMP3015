@@ -12,33 +12,72 @@
 #include "helper/objmesh.h"
 #include "helper/cube.h"
 #include "helper/skybox.h"
+#include "helper/sphere.h"
 
 class SceneBasic_Uniform : public Scene
 {
 private:
-    GLSLProgram prog;
-    Torus torus;
-    Teapot teapot;
-    Plane plane;
+    //GLSLProgram prog;
+    //Torus torus;
+    //Teapot teapot;
+    //Plane plane;
     //Cube cube;
     //std::unique_ptr<ObjMesh> mesh;
     //std::unique_ptr<ObjMesh> ogre;
     //SkyBox sky;
+    //Sphere sphere;
 
+    //void setMatrices();
+    //void compile();
+
+    ////GAUSSIAN
+    //float angle, tPrev, rotSpeed;
+    //GLuint fsQuad;
+    //GLuint renderFBO, intermediateFBO;
+    //GLuint renderTex, intermediateTex;
+    //void setupFBO();
+    //void pass1();
+    //void pass2();
+    //void pass3();
+    //float gauss(float, float);
+
+    ////HDR
+    //GLSLProgram prog;
+    //GLuint hdrFBO;
+    //GLuint quad;
+    //GLuint hdrTex, avgTex;
+    //Plane plane;
+    //Sphere sphere;
+    //Teapot teapot;
+    //void setMatrices();
+    //void compile();
+    //void setupFBO();
+    //void pass1();
+    //void pass2();
+    //void computeLogAveLuminance();
+    //void drawScene();
+
+    GLSLProgram prog;
+    GLuint fsQuad;
+    GLuint hdrFBO, blurFBO;
+    GLuint hdrTex, tex1, tex2;
+    GLuint linearSampler, nearestSampler;
+    Plane plane;
+    Sphere sphere;
+    Teapot teapot;
+    float angle;
+    int bloomBufWidth, bloomBufHeight;
     void setMatrices();
     void compile();
-
-    float angle, tPrev, rotSpeed;
-    GLuint fsQuad;
-    GLuint renderFBO, intermediateFBO;
-    GLuint renderTex, intermediateTex;
-
-
     void setupFBO();
     void pass1();
     void pass2();
     void pass3();
+    void pass4();
+    void pass5();
     float gauss(float, float);
+    void computeLogAveLuminance();
+    void drawScene();
     
 
 public:

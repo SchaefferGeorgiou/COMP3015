@@ -163,12 +163,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\basic_uniform_Blinn_phong_alpha.frag" />
+    <None Include="shader\basic_uniform_Blinn_phong_bloom.frag" />
+    <None Include="shader\basic_uniform_Blinn_phong_bloom.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_edge_detection.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_edge_detection.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_fog.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_fog.vert" />
+    <None Include="shader\basic_uniform_Blinn_phong_gamma_correction.frag" />
+    <None Include="shader\basic_uniform_Blinn_phong_gamma_correction.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_gaussian_blur.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_gaussian_blur.vert" />
+    <None Include="shader\basic_uniform_Blinn_phong_hdr.frag" />
+    <None Include="shader\basic_uniform_Blinn_phong_hdr.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_multi_texture.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_normal_map.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_normal_map.vert" />
