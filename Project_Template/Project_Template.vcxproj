@@ -165,6 +165,8 @@
     <None Include="shader\basic_uniform_Blinn_phong_alpha.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_bloom.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_bloom.vert" />
+    <None Include="shader\basic_uniform_Blinn_phong_deferred.frag" />
+    <None Include="shader\basic_uniform_Blinn_phong_deferred.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_edge_detection.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_edge_detection.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_fog.frag" />
@@ -178,6 +180,9 @@
     <None Include="shader\basic_uniform_Blinn_phong_multi_texture.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_normal_map.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_normal_map.vert" />
+    <None Include="shader\basic_uniform_Blinn_phong_point_sprite.frag" />
+    <None Include="shader\basic_uniform_Blinn_phong_point_sprite.geom" />
+    <None Include="shader\basic_uniform_Blinn_phong_point_sprite.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_skybox.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_skybox.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_spotlight.frag" />

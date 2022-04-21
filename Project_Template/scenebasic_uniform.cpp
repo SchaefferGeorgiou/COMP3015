@@ -22,7 +22,7 @@ using glm::vec3;
 using glm::vec4;
 using glm::mat4;
 
-SceneBasic_Uniform::SceneBasic_Uniform() : plane(20.0f, 50.0f, 1, 1), teapot(14, mat4(1.0f)), sphere(2.0f, 50, 50)
+SceneBasic_Uniform::SceneBasic_Uniform()
 {
 	//mesh = ObjMesh::load("../Project_Template/media/pig_triangulated.obj", true);
 	//ogre = ObjMesh::load("../Project_Template/media/bs_ears.obj",false, true);
@@ -265,6 +265,145 @@ SceneBasic_Uniform::SceneBasic_Uniform() : plane(20.0f, 50.0f, 1, 1), teapot(14,
 //}
 
 ////BLOOM
+//void SceneBasic_Uniform::initScene()
+//{
+//	compile();
+//
+//	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+//
+//	glEnable(GL_DEPTH_TEST);
+//
+//	vec3 intense = vec3(0.6f);
+//	prog.setUniform("Lights[0].L", intense);
+//	prog.setUniform("Lights[1].L", intense);
+//	prog.setUniform("Lights[2].L", intense);
+//
+//	intense = vec3(0.2f);
+//	prog.setUniform("Lights[0].La", intense);
+//	prog.setUniform("Lights[1].La", intense);
+//	prog.setUniform("Lights[2].La", intense);
+//
+//	projection = mat4(1.0f);
+//	angle = glm::pi<float>() / 2.0f;
+//
+//	prog.setUniform("Gamma", 0.5f);
+//
+//	setupFBO();
+//
+//	// Array for full-screen quad
+//	GLfloat verts[] = {
+//	-1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+//	-1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f
+//	};
+//
+//	GLfloat tc[] = {
+//	0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+//	0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
+//	};
+//
+//	// Set up the buffers
+//	unsigned int handle[2];
+//	glGenBuffers(2, handle);
+//	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
+//	glBufferData(GL_ARRAY_BUFFER, 6 * 3 * sizeof(float), verts, GL_STATIC_DRAW);
+//	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
+//	glBufferData(GL_ARRAY_BUFFER, 6 * 2 * sizeof(float), tc, GL_STATIC_DRAW);
+//
+//	// Set up the vertex array object
+//	glGenVertexArrays(1, &fsQuad);
+//	glBindVertexArray(fsQuad);
+//	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
+//	glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+//
+//	glEnableVertexAttribArray(0); // Vertex position
+//	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
+//	glVertexAttribPointer((GLuint)2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+//
+//	glEnableVertexAttribArray(2); // Texture coordinates
+//	glBindVertexArray(0);
+//	prog.setUniform("LumThresh", 1.7f);
+//	float weights[10], sum, sigma2 = 25.0f;
+//
+//	// Compute and sum the weights
+//	weights[0] = gauss(0, sigma2);
+//	sum = weights[0];
+//	for (int i = 1; i < 10; i++) {
+//		weights[i] = gauss(float(i), sigma2);
+//		sum += 2 * weights[i];
+//	}
+//
+//	// Normalize the weights and set the uniform
+//	for (int i = 0; i < 10; i++) {
+//		std::stringstream uniName;
+//		uniName << "Weight[" << i << "]";
+//		float val = weights[i] / sum;
+//		prog.setUniform(uniName.str().c_str(), val);
+//	}
+//
+//	// Set up two sampler objects for linear and nearest filtering
+//	GLuint samplers[2];
+//	glGenSamplers(2, samplers);
+//	linearSampler = samplers[0];
+//	nearestSampler = samplers[1];
+//	GLfloat border[] = { 0.0f,0.0f,0.0f,0.0f };
+//
+//	// Set up the nearest sampler
+//	glSamplerParameteri(nearestSampler, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//	glSamplerParameteri(nearestSampler, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//	glSamplerParameteri(nearestSampler, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+//	glSamplerParameteri(nearestSampler, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+//	glSamplerParameterfv(nearestSampler, GL_TEXTURE_BORDER_COLOR, border);
+//
+//	// Set up the linear sampler
+//	glSamplerParameteri(linearSampler, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//	glSamplerParameteri(linearSampler, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//	glSamplerParameteri(linearSampler, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+//	glSamplerParameteri(linearSampler, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+//	glSamplerParameterfv(linearSampler, GL_TEXTURE_BORDER_COLOR, border);
+//
+//	// We want nearest sampling except for the last pass.
+//	glBindSampler(0, nearestSampler);
+//	glBindSampler(1, nearestSampler);
+//}
+
+////DEFERRED
+//void SceneBasic_Uniform::initScene()
+//{
+//	compile();
+//	glEnable(GL_DEPTH_TEST);
+//	float c = 1.5f;
+//	angle = glm::pi<float>() / 2.0f;
+//	// Array for quad
+//	GLfloat verts[] = {
+//	-1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+//	-1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f
+//	};
+//	GLfloat tc[] = {
+//	0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+//	0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
+//	};
+//	// Set up the buffers
+//	unsigned int handle[2];
+//	glGenBuffers(2, handle);
+//	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
+//	glBufferData(GL_ARRAY_BUFFER, 6 * 3 * sizeof(float), verts,
+//		GL_STATIC_DRAW);
+//	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
+//	glBufferData(GL_ARRAY_BUFFER, 6 * 2 * sizeof(float), tc, GL_STATIC_DRAW);
+//	// Set up the vertex array object
+//	glGenVertexArrays(1, &quad);
+//	glBindVertexArray(quad);
+//	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
+//	glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+//	glEnableVertexAttribArray(0); // Vertex position
+//	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
+//	glVertexAttribPointer((GLuint)2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+//	glEnableVertexAttribArray(2); // Texture coordinates
+//	glBindVertexArray(0);
+//	setupFBO();
+//	prog.setUniform("Light.L", vec3(1.0f));
+//}
+
 void SceneBasic_Uniform::initScene()
 {
 	compile();
@@ -273,104 +412,52 @@ void SceneBasic_Uniform::initScene()
 
 	glEnable(GL_DEPTH_TEST);
 
-	vec3 intense = vec3(0.6f);
-	prog.setUniform("Lights[0].L", intense);
-	prog.setUniform("Lights[1].L", intense);
-	prog.setUniform("Lights[2].L", intense);
+	numSprites = 50;
+	locations = new float[numSprites * 3];
+	srand((unsigned int)time(0));
 
-	intense = vec3(0.2f);
-	prog.setUniform("Lights[0].La", intense);
-	prog.setUniform("Lights[1].La", intense);
-	prog.setUniform("Lights[2].La", intense);
+	for (size_t i = 0; i < numSprites; i++)
+	{
+		vec3 p(((float)rand() / RAND_MAX * 2.0F) - 1.0F,
+			((float)rand() / RAND_MAX * 2.0f) - 1.0f,
+			((float)rand() / RAND_MAX * 2.0f) - 1.0f);
 
-	projection = mat4(1.0f);
-	angle = glm::pi<float>() / 2.0f;
+		locations[i * 3] = p.x;
+		locations[i * 3 + 1] = p.y;
+		locations[i * 3 + 2] = p.z;
+	}
 
-	prog.setUniform("Gamma", 0.5f);
+	GLuint handle;
+	glGenBuffers(1, &handle);
 
-	setupFBO();
+	glBindBuffer(GL_ARRAY_BUFFER, handle);
+	glBufferData(GL_ARRAY_BUFFER, numSprites * 3 * sizeof(float), locations, GL_STATIC_DRAW);
 
-	// Array for full-screen quad
-	GLfloat verts[] = {
-	-1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-	-1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f
-	};
+	delete[] locations;
 
-	GLfloat tc[] = {
-	0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-	0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
-	};
+	glGenVertexArrays(1, &sprites);
+	glBindVertexArray(sprites);
 
-	// Set up the buffers
-	unsigned int handle[2];
-	glGenBuffers(2, handle);
-	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
-	glBufferData(GL_ARRAY_BUFFER, 6 * 3 * sizeof(float), verts, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
-	glBufferData(GL_ARRAY_BUFFER, 6 * 2 * sizeof(float), tc, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, handle);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, ((GLubyte*)NULL + (0)));
+	glEnableVertexAttribArray(0);
 
-	// Set up the vertex array object
-	glGenVertexArrays(1, &fsQuad);
-	glBindVertexArray(fsQuad);
-	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
-	glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-	glEnableVertexAttribArray(0); // Vertex position
-	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
-	glVertexAttribPointer((GLuint)2, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-	glEnableVertexAttribArray(2); // Texture coordinates
 	glBindVertexArray(0);
-	prog.setUniform("LumThresh", 1.7f);
-	float weights[10], sum, sigma2 = 25.0f;
 
-	// Compute and sum the weights
-	weights[0] = gauss(0, sigma2);
-	sum = weights[0];
-	for (int i = 1; i < 10; i++) {
-		weights[i] = gauss(float(i), sigma2);
-		sum += 2 * weights[i];
-	}
+	const char* texName = "media/texture/flower.png";
+	Texture::loadTexture(texName);
 
-	// Normalize the weights and set the uniform
-	for (int i = 0; i < 10; i++) {
-		std::stringstream uniName;
-		uniName << "Weight[" << i << "]";
-		float val = weights[i] / sum;
-		prog.setUniform(uniName.str().c_str(), val);
-	}
-
-	// Set up two sampler objects for linear and nearest filtering
-	GLuint samplers[2];
-	glGenSamplers(2, samplers);
-	linearSampler = samplers[0];
-	nearestSampler = samplers[1];
-	GLfloat border[] = { 0.0f,0.0f,0.0f,0.0f };
-
-	// Set up the nearest sampler
-	glSamplerParameteri(nearestSampler, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glSamplerParameteri(nearestSampler, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glSamplerParameteri(nearestSampler, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glSamplerParameteri(nearestSampler, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	glSamplerParameterfv(nearestSampler, GL_TEXTURE_BORDER_COLOR, border);
-
-	// Set up the linear sampler
-	glSamplerParameteri(linearSampler, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glSamplerParameteri(linearSampler, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glSamplerParameteri(linearSampler, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glSamplerParameteri(linearSampler, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	glSamplerParameterfv(linearSampler, GL_TEXTURE_BORDER_COLOR, border);
-
-	// We want nearest sampling except for the last pass.
-	glBindSampler(0, nearestSampler);
-	glBindSampler(1, nearestSampler);
+	prog.setUniform("SpriteTex", 0);
+	prog.setUniform("Size2", 0.15f);
 }
 
 void SceneBasic_Uniform::compile()
 {
 	try {
-		prog.compileShader("shader/basic_uniform_Blinn_phong_gamma_correction.vert");
-		prog.compileShader("shader/basic_uniform_Blinn_phong_gamma_correction.frag");
+		prog.compileShader("shader/basic_uniform_Blinn_phong_point_sprite.vert");
+		prog.compileShader("shader/basic_uniform_Blinn_phong_point_sprite.geom");
+		prog.compileShader("shader/basic_uniform_Blinn_phong_point_sprite.frag");
+		
 
 
 		prog.link();
@@ -381,17 +468,27 @@ void SceneBasic_Uniform::compile()
 	}
 }
 
+
+////WEEK 1-5
+//void SceneBasic_Uniform::setMatrices()
+//{
+//	mat4 mv = view * model;
+//
+//	prog.setUniform("ModelViewMatrix", mv);
+//
+//	prog.setUniform("NormalMatrix", glm::mat3(vec3(mv[0]),
+//									vec3(mv[1]),
+//									vec3(mv[2])));
+//
+//	prog.setUniform("MVP", projection * mv);
+//}
+
 void SceneBasic_Uniform::setMatrices()
 {
 	mat4 mv = view * model;
 
 	prog.setUniform("ModelViewMatrix", mv);
-
-	prog.setUniform("NormalMatrix", glm::mat3(vec3(mv[0]),
-									vec3(mv[1]),
-									vec3(mv[2])));
-
-	prog.setUniform("MVP", projection * mv);
+	prog.setUniform("ProjectionMatrix", projection);
 }
 
 void SceneBasic_Uniform::update( float t )
@@ -414,104 +511,129 @@ void SceneBasic_Uniform::update( float t )
 		
 }
 
+////WEEK 1-5
+//void SceneBasic_Uniform::render()
+//{
+// //   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//
+//	//glm::vec4 lightPos = glm::vec4(2.0f, 1.0f, 2.0f, 1.0f);
+//	//prog.setUniform("Light.Position", view * lightPos);
+//	//prog.setUniform("Light.La", vec3(0.2f, 0.2f, 0.2f));
+//	//prog.setUniform("Light.Ld", vec3(0.2f, 0.2f, 0.2f));
+//
+//	////Skybox
+//	//vec3 cameraPos = vec3(7.0f * cos(angle), 2.0f, 7.0f * sin(angle));
+//	//view = glm::lookAt(cameraPos, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+//	//// Draw sky
+//	//prog.use();
+//	//model = mat4(1.0f);
+//	//setMatrices();
+//	//sky.render();
+//
+//	//Piggy
+//	//prog.setUniform("Material.Kd", 0.4f, 0.4f, 0.4f);
+//	//prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
+//	//prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
+//	//prog.setUniform("Material.Shininess", 120.0f);
+//	//model = mat4(1.0f);
+//	//model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
+//	//setMatrices();
+//	//mesh->render();
+//
+//	//glm::mat3 normalMatrix = glm::mat3(vec3(view[0]), vec3(view[1]), vec3(view[2]));
+//	//prog.setUniform("Light.Direction", normalMatrix * vec3(-lightPos));
+//
+//	////Ogre
+//	//prog.setUniform("Material.Kd", 0.4f, 0.4f, 0.4f);
+//	//prog.setUniform("Material.Ks", 0.7f, 0.7f, 0.7f);
+//	//prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
+//	//prog.setUniform("Material.Shininess", 2000.0f);
+//	//model = mat4(1.0f);
+//	//setMatrices();
+//	//ogre->render();
+//	
+//	////Cube
+//	//prog.setUniform("Material.Ks", 0.95f, 0.95f, 0.95f);
+//	//prog.setUniform("Material.Shininess", 50.0f);
+//	//model = mat4(1.0f);
+//	//model = glm::translate(model, vec3(0.0f, 0.0f, -1.0f));
+//	//setMatrices();
+//	//cube.render();
+//
+//	////Teapot
+//	//model = mat4(1.0f);
+//	//model = glm::translate(model, vec3(0.0f, 0.0f, -1.0f));
+//	//model = glm::rotate(model, glm::radians(45.0f), vec3(0.0f, 1.0f, 0.0f));
+//	//model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
+//	//setMatrices();
+//	//teapot.render();
+//
+//	////Donut
+//	//prog.setUniform("Material.Kd", 0.2f, 0.55f, 0.9f);
+//	//prog.setUniform("Material.Ks", 0.95f, 0.95f, 0.95f);
+//	//prog.setUniform("Material.Ka", 0.2f * 0.3f, 0.55f * 0.3f, 0.9f * 0.3f);
+//	//prog.setUniform("Material.Shininess", 100.0f);
+//	//model = mat4(1.0f);
+//	//model = glm::translate(model, vec3(-1.0f, 0.75f, 3.0f));
+//	//model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
+//	//setMatrices();
+//	//torus.render();
+//
+//	////Plane
+//	//prog.setUniform("Material.Kd", 0.7f, 0.7f, 0.7f);
+//	//prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
+//	//prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
+//	//prog.setUniform("Material.Shininess", 180.0f);
+//	//model = mat4(1.0f);
+//	//setMatrices();
+//	//plane.render();    
+//
+//	////Edge Detection
+//	//pass1();
+//	//glFlush();
+//	//pass2();
+//
+//	////Gaussian Blur
+//	//pass1();
+//	//pass2();
+//	//pass3();
+//
+//	////HDR
+//	//pass1();
+//	//computeLogAveLuminance();
+//	//pass2();
+//
+//	////BLOOM
+//	//pass1();
+//	//computeLogAveLuminance();
+//	//pass2();
+//	//pass3();
+//	//pass4();
+//	//pass5();
+//	
+//	////DEFERRED
+//	//pass1();
+//	//pass2();
+//
+//}
+
+//GEOM SHADER
 void SceneBasic_Uniform::render()
 {
- //   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//glm::vec4 lightPos = glm::vec4(2.0f, 1.0f, 2.0f, 1.0f);
-	//prog.setUniform("Light.Position", view * lightPos);
-	//prog.setUniform("Light.La", vec3(0.2f, 0.2f, 0.2f));
-	//prog.setUniform("Light.Ld", vec3(0.2f, 0.2f, 0.2f));
+	vec3 cameraPos(0.0f, 0.0f, 3.0f);
+	view = glm::lookAt(cameraPos,
+						vec3(0.0f, 0.0f, 0.0f),
+						vec3(0.0f, 1.0f, 0.0f));
 
-	////Skybox
-	//vec3 cameraPos = vec3(7.0f * cos(angle), 2.0f, 7.0f * sin(angle));
-	//view = glm::lookAt(cameraPos, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
-	//// Draw sky
-	//prog.use();
-	//model = mat4(1.0f);
-	//setMatrices();
-	//sky.render();
+	model = mat4(1.0f);
+	setMatrices();
 
-	//Piggy
-	//prog.setUniform("Material.Kd", 0.4f, 0.4f, 0.4f);
-	//prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
-	//prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
-	//prog.setUniform("Material.Shininess", 120.0f);
-	//model = mat4(1.0f);
-	//model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
-	//setMatrices();
-	//mesh->render();
+	glBindVertexArray(sprites);
+	glDrawArrays(GL_POINTS, 0, numSprites);
 
-	//glm::mat3 normalMatrix = glm::mat3(vec3(view[0]), vec3(view[1]), vec3(view[2]));
-	//prog.setUniform("Light.Direction", normalMatrix * vec3(-lightPos));
-
-	////Ogre
-	//prog.setUniform("Material.Kd", 0.4f, 0.4f, 0.4f);
-	//prog.setUniform("Material.Ks", 0.7f, 0.7f, 0.7f);
-	//prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
-	//prog.setUniform("Material.Shininess", 2000.0f);
-	//model = mat4(1.0f);
-	//setMatrices();
-	//ogre->render();
-	
-	////Cube
-	//prog.setUniform("Material.Ks", 0.95f, 0.95f, 0.95f);
-	//prog.setUniform("Material.Shininess", 50.0f);
-	//model = mat4(1.0f);
-	//model = glm::translate(model, vec3(0.0f, 0.0f, -1.0f));
-	//setMatrices();
-	//cube.render();
-
-	////Teapot
-	//model = mat4(1.0f);
-	//model = glm::translate(model, vec3(0.0f, 0.0f, -1.0f));
-	//model = glm::rotate(model, glm::radians(45.0f), vec3(0.0f, 1.0f, 0.0f));
-	//model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
-	//setMatrices();
-	//teapot.render();
-
-	////Donut
-	//prog.setUniform("Material.Kd", 0.2f, 0.55f, 0.9f);
-	//prog.setUniform("Material.Ks", 0.95f, 0.95f, 0.95f);
-	//prog.setUniform("Material.Ka", 0.2f * 0.3f, 0.55f * 0.3f, 0.9f * 0.3f);
-	//prog.setUniform("Material.Shininess", 100.0f);
-	//model = mat4(1.0f);
-	//model = glm::translate(model, vec3(-1.0f, 0.75f, 3.0f));
-	//model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
-	//setMatrices();
-	//torus.render();
-
-	////Plane
-	//prog.setUniform("Material.Kd", 0.7f, 0.7f, 0.7f);
-	//prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
-	//prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
-	//prog.setUniform("Material.Shininess", 180.0f);
-	//model = mat4(1.0f);
-	//setMatrices();
-	//plane.render();    
-
-	////Edge Detection
-	//pass1();
-	//glFlush();
-	//pass2();
-
-	////Gaussian Blur
-	//pass1();
-	//pass2();
-	//pass3();
-
-	////HDR
-	//pass1();
-	//computeLogAveLuminance();
-	//pass2();
-
-	//BLOOM
-	pass1();
-	computeLogAveLuminance();
-	pass2();
-	pass3();
-	pass4();
-	pass5();
+	glFinish();
 }
 
 void SceneBasic_Uniform::resize(int w, int h)
@@ -519,8 +641,7 @@ void SceneBasic_Uniform::resize(int w, int h)
 	glViewport(0, 0, w, h);
 	width = w;
 	height = h;
-	projection = glm::perspective(glm::radians(70.0f), (float)w / h,
-		0.3f, 100.0f);
+	projection = glm::perspective(glm::radians(70.0f), (float)w / h, 0.3f, 100.0f);
 }
 
 ////EDGE DETECTION\\\\
@@ -641,59 +762,90 @@ void SceneBasic_Uniform::resize(int w, int h)
 //}
 
 ////BLOOM
-void SceneBasic_Uniform::setupFBO()
-{
-	// Generate and bind the framebuffer
-	glGenFramebuffers(1, &hdrFBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+//void SceneBasic_Uniform::setupFBO()
+//{
+//	// Generate and bind the framebuffer
+//	glGenFramebuffers(1, &hdrFBO);
+//	glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+//
+//	// Create the texture object
+//	glGenTextures(1, &hdrTex);
+//	glActiveTexture(GL_TEXTURE0);
+//	glBindTexture(GL_TEXTURE_2D, hdrTex);
+//	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB32F, width, height);
+//
+//	// Bind the texture to the FBO
+//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+//		hdrTex, 0);
+//
+//	// Create the depth buffer
+//	GLuint depthBuf;
+//	glGenRenderbuffers(1, &depthBuf);
+//	glBindRenderbuffer(GL_RENDERBUFFER, depthBuf);
+//	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+//
+//	// Bind the depth buffer to the FBO
+//	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuf);
+//
+//	// Set the targets for the fragment output variables
+//	GLenum drawBuffers[] = { GL_COLOR_ATTACHMENT0 };
+//	glDrawBuffers(1, drawBuffers);
+//
+//	// Create an FBO for the bright-pass filter and blur
+//	glGenFramebuffers(1, &blurFBO);
+//	glBindFramebuffer(GL_FRAMEBUFFER, blurFBO);
+//
+//	// Create two texture objects to ping-pong for the bright-pass filter
+//	// and the two-pass blur
+//	bloomBufWidth = width / 8;
+//	bloomBufHeight = height / 8;
+//	glGenTextures(1, &tex1);
+//	glActiveTexture(GL_TEXTURE1);
+//	glBindTexture(GL_TEXTURE_2D, tex1);
+//	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB32F, bloomBufWidth, bloomBufHeight);
+//	glActiveTexture(GL_TEXTURE2);
+//	glGenTextures(1, &tex2);
+//	glBindTexture(GL_TEXTURE_2D, tex2);
+//	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB32F, bloomBufWidth, bloomBufHeight);
+//
+//	// Bind tex1 to the FBO
+//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,	tex1, 0);
+//	glDrawBuffers(1, drawBuffers);
+//
+//	// Unbind the framebuffer, and revert to default framebuffer
+//	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//}
 
-	// Create the texture object
-	glGenTextures(1, &hdrTex);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, hdrTex);
-	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB32F, width, height);
-
-	// Bind the texture to the FBO
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-		hdrTex, 0);
-
-	// Create the depth buffer
-	GLuint depthBuf;
-	glGenRenderbuffers(1, &depthBuf);
-	glBindRenderbuffer(GL_RENDERBUFFER, depthBuf);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-
-	// Bind the depth buffer to the FBO
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuf);
-
-	// Set the targets for the fragment output variables
-	GLenum drawBuffers[] = { GL_COLOR_ATTACHMENT0 };
-	glDrawBuffers(1, drawBuffers);
-
-	// Create an FBO for the bright-pass filter and blur
-	glGenFramebuffers(1, &blurFBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, blurFBO);
-
-	// Create two texture objects to ping-pong for the bright-pass filter
-	// and the two-pass blur
-	bloomBufWidth = width / 8;
-	bloomBufHeight = height / 8;
-	glGenTextures(1, &tex1);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, tex1);
-	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB32F, bloomBufWidth, bloomBufHeight);
-	glActiveTexture(GL_TEXTURE2);
-	glGenTextures(1, &tex2);
-	glBindTexture(GL_TEXTURE_2D, tex2);
-	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB32F, bloomBufWidth, bloomBufHeight);
-
-	// Bind tex1 to the FBO
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,	tex1, 0);
-	glDrawBuffers(1, drawBuffers);
-
-	// Unbind the framebuffer, and revert to default framebuffer
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
+////DEFERRED
+//void SceneBasic_Uniform::setupFBO()
+//{
+//	GLuint depthBuf, posTex, normTex, colorTex;
+//	// Create and bind the FBO
+//	glGenFramebuffers(1, &deferredFBO);
+//	glBindFramebuffer(GL_FRAMEBUFFER, deferredFBO);
+//	// The depth buffer
+//	glGenRenderbuffers(1, &depthBuf);
+//	glBindRenderbuffer(GL_RENDERBUFFER, depthBuf);
+//	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+//	// Create the textures for position, normal and color
+//	createGBufTex(GL_TEXTURE0, GL_RGB32F, posTex); // Position
+//	createGBufTex(GL_TEXTURE1, GL_RGB32F, normTex); // Normal
+//	createGBufTex(GL_TEXTURE2, GL_RGB8, colorTex); // Color
+//	// Attach the textures to the framebuffer
+//	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+//		GL_RENDERBUFFER, depthBuf);
+//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+//		posTex, 0);
+//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D,
+//		normTex, 0);
+//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D,
+//		colorTex, 0);
+//	GLenum drawBuffers[] = { GL_NONE, GL_COLOR_ATTACHMENT0,
+//	GL_COLOR_ATTACHMENT1,
+//	GL_COLOR_ATTACHMENT2 };
+//	glDrawBuffers(4, drawBuffers);
+//	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//}
 
 ////EDGE DETECTION & GAUSSIAN BLUR
 //void SceneBasic_Uniform::pass1()
@@ -740,22 +892,55 @@ void SceneBasic_Uniform::setupFBO()
 //	torus.render();
 //}
 
-//HDR & BLOOM
-void SceneBasic_Uniform::pass1()
-{
-	prog.setUniform("Pass", 1);
-	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-	glViewport(0, 0, width, height);
-	glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glEnable(GL_DEPTH_TEST);
+////HDR & BLOOM
+//void SceneBasic_Uniform::pass1()
+//{
+//	prog.setUniform("Pass", 1);
+//	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+//	glViewport(0, 0, width, height);
+//	glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//	glEnable(GL_DEPTH_TEST);
+//
+//	view = glm::lookAt(vec3(2.0f, 0.0f, 14.0f), vec3(0.0f, 0.0f, 0.0f),
+//		vec3(0.0f, 1.0f, 0.0f));
+//	projection = glm::perspective(glm::radians(60.0f), (float)width / height, 0.3f, 100.0f);
+//
+//	drawScene();
+//}
 
-	view = glm::lookAt(vec3(2.0f, 0.0f, 14.0f), vec3(0.0f, 0.0f, 0.0f),
-		vec3(0.0f, 1.0f, 0.0f));
-	projection = glm::perspective(glm::radians(60.0f), (float)width / height, 0.3f, 100.0f);
-
-	drawScene();
-}
+////DEFERRED
+//void SceneBasic_Uniform::pass1()
+//{
+//	prog.setUniform("Pass", 1);
+//	glBindFramebuffer(GL_FRAMEBUFFER, deferredFBO);
+//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//	glEnable(GL_DEPTH_TEST);
+//	view = glm::lookAt(vec3(7.0f * cos(angle), 4.0f, 7.0f * sin(angle)),
+//		vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+//	projection = glm::perspective(glm::radians(60.0f), (float)width / height,
+//		0.3f, 100.0f);
+//	prog.setUniform("Light.Position", glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+//	prog.setUniform("Material.Kd", 0.9f, 0.9f, 0.9f);
+//	model = mat4(1.0f);
+//	model = glm::translate(model, vec3(0.0f, 0.0f, 0.0f));
+//	model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
+//	setMatrices();
+//	teapot.render();
+//	prog.setUniform("Material.Kd", 0.4f, 0.4f, 0.4f);
+//	model = mat4(1.0f);
+//	model = glm::translate(model, vec3(0.0f, -0.75f, 0.0f));
+//	setMatrices();
+//	plane.render();
+//	prog.setUniform("Light.Position", glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+//	prog.setUniform("Material.Kd", 0.2f, 0.5f, 0.9f);
+//	model = mat4(1.0f);
+//	model = glm::translate(model, vec3(1.0f, 1.0f, 3.0f));
+//	model = glm::rotate(model, glm::radians(90.0f), vec3(1.0f, 0.0f, 0.0f));
+//	setMatrices();
+//	torus.render();
+//	glFinish();
+//}
 
 ////Edge Detection
 //void SceneBasic_Uniform::pass2()
@@ -814,28 +999,47 @@ void SceneBasic_Uniform::pass1()
 //	glDrawArrays(GL_TRIANGLES, 0, 6);
 //}
 
-void SceneBasic_Uniform::pass2()
-{
-	prog.setUniform("Pass", 2);
-	glBindFramebuffer(GL_FRAMEBUFFER, blurFBO);
+////BLOOM
+//void SceneBasic_Uniform::pass2()
+//{
+//	prog.setUniform("Pass", 2);
+//	glBindFramebuffer(GL_FRAMEBUFFER, blurFBO);
+//
+//	// We're writing to tex1 this time
+//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex1, 0);
+//	glViewport(0, 0, bloomBufWidth, bloomBufHeight);
+//	glDisable(GL_DEPTH_TEST);
+//	glClearColor(0, 0, 0, 0);
+//	glClear(GL_COLOR_BUFFER_BIT);
+//
+//	model = mat4(1.0f);
+//	view = mat4(1.0f);
+//	projection = mat4(1.0f);
+//	setMatrices();
+//
+//	// Render the full-screen quad
+//	glBindVertexArray(fsQuad);
+//	glDrawArrays(GL_TRIANGLES, 0, 6);
+//}
 
-	// We're writing to tex1 this time
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex1, 0);
-	glViewport(0, 0, bloomBufWidth, bloomBufHeight);
-	glDisable(GL_DEPTH_TEST);
-	glClearColor(0, 0, 0, 0);
-	glClear(GL_COLOR_BUFFER_BIT);
+////DEFERRED
+//void SceneBasic_Uniform::pass2()
+//{
+//	prog.setUniform("Pass", 2);
+//	// Revert to default framebuffer
+//	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//	glDisable(GL_DEPTH_TEST);
+//	view = mat4(1.0);
+//	model = mat4(1.0);
+//	projection = mat4(1.0);
+//	setMatrices();
+//	// Render the quad
+//	glBindVertexArray(quad);
+//	glDrawArrays(GL_TRIANGLES, 0, 6);
+//}
 
-	model = mat4(1.0f);
-	view = mat4(1.0f);
-	projection = mat4(1.0f);
-	setMatrices();
-
-	// Render the full-screen quad
-	glBindVertexArray(fsQuad);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-}
-
+//GAUSSIAN BLUR(?)
 //void SceneBasic_Uniform::pass3()
 //{
 //	prog.setUniform("Pass", 3);
@@ -852,132 +1056,144 @@ void SceneBasic_Uniform::pass2()
 //	glDrawArrays(GL_TRIANGLES, 0, 6);
 //}
 
-//BLOOM
-void SceneBasic_Uniform::pass3()
-{
-	prog.setUniform("Pass", 3);
+////BLOOM
+//void SceneBasic_Uniform::pass3()
+//{
+//	prog.setUniform("Pass", 3);
+//
+//	// We're writing to tex2 this time
+//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,	tex2, 0);
+//
+//	// Render the full-screen quad
+//	glBindVertexArray(fsQuad);
+//	glDrawArrays(GL_TRIANGLES, 0, 6);
+//}
 
-	// We're writing to tex2 this time
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,	tex2, 0);
+////BLOOM
+//void SceneBasic_Uniform::pass4()
+//{
+//	prog.setUniform("Pass", 4);
+//
+//	// We're writing to tex1 this time
+//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,	tex1, 0);
+//
+//	// Render the full-screen quad
+//	glBindVertexArray(fsQuad);
+//	glDrawArrays(GL_TRIANGLES, 0, 6);
+//}
 
-	// Render the full-screen quad
-	glBindVertexArray(fsQuad);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-}
+////BLOOM
+//void SceneBasic_Uniform::pass5()
+//{
+//	prog.setUniform("Pass", 5);
+//
+//	// Bind to the default framebuffer, this time we're going to
+//	// actually draw to the screen!
+//	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//	glClear(GL_COLOR_BUFFER_BIT);
+//	glViewport(0, 0, width, height);
+//
+//	// In this pass, we're reading from tex1 (unit 1) and we want
+//	// linear sampling to get an extra blur
+//	glBindSampler(1, linearSampler);
+//
+//	// Render the full-screen quad
+//	glBindVertexArray(fsQuad);
+//	glDrawArrays(GL_TRIANGLES, 0, 6);
+//
+//	// Revert to nearest sampling
+//	glBindSampler(1, nearestSampler);
+//}
 
-//BLOOM
-void SceneBasic_Uniform::pass4()
-{
-	prog.setUniform("Pass", 4);
+////GAUSSIAN BLUR & BLOOM
+//float SceneBasic_Uniform::gauss(float x, float sigma2)
+//{
+//	double coeff = 1.0 / (glm::two_pi<double>() * sigma2);
+//	double expon = -(x * x) / (2.0 * sigma2);
+//	return (float)(coeff * exp(expon));
+//}
 
-	// We're writing to tex1 this time
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,	tex1, 0);
+////HDR & BLOOM
+//void SceneBasic_Uniform::computeLogAveLuminance()
+//{
+//	int size = width * height;
+//
+//	std::vector<GLfloat> texData(size * 3);
+//
+//	glActiveTexture(GL_TEXTURE0);
+//	glBindTexture(GL_TEXTURE_2D, hdrTex);
+//	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_FLOAT, texData.data());
+//
+//	float sum = 0.0f;
+//
+//	for (int i = 0; i < size; i++) {
+//		float lum = glm::dot(vec3(texData[i * 3 + 0], texData[i * 3 + 1],
+//			texData[i * 3 + 2]),
+//			vec3(0.2126f, 0.7152f, 0.0722f));
+//		sum += logf(lum + 0.00001f);
+//	}
+//
+//	prog.setUniform("AveLum", expf(sum / size));
+//}
 
-	// Render the full-screen quad
-	glBindVertexArray(fsQuad);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-}
+////DEFERRED
+//void SceneBasic_Uniform::createGBufTex(GLenum texUnit, GLenum format, GLuint & texid)
+//{
+//	glActiveTexture(texUnit);
+//	glGenTextures(1, &texid);
+//	glBindTexture(GL_TEXTURE_2D, texid);
+//	glTexStorage2D(GL_TEXTURE_2D, 1, format, width, height);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+//}
 
-//BLOOM
-void SceneBasic_Uniform::pass5()
-{
-	prog.setUniform("Pass", 5);
-
-	// Bind to the default framebuffer, this time we're going to
-	// actually draw to the screen!
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClear(GL_COLOR_BUFFER_BIT);
-	glViewport(0, 0, width, height);
-
-	// In this pass, we're reading from tex1 (unit 1) and we want
-	// linear sampling to get an extra blur
-	glBindSampler(1, linearSampler);
-
-	// Render the full-screen quad
-	glBindVertexArray(fsQuad);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-
-	// Revert to nearest sampling
-	glBindSampler(1, nearestSampler);
-}
-
-//GAUSSIAN BLUR & BLOOM
-float SceneBasic_Uniform::gauss(float x, float sigma2)
-{
-	double coeff = 1.0 / (glm::two_pi<double>() * sigma2);
-	double expon = -(x * x) / (2.0 * sigma2);
-	return (float)(coeff * exp(expon));
-}
-
-//HDR & BLOOM
-void SceneBasic_Uniform::computeLogAveLuminance()
-{
-	int size = width * height;
-
-	std::vector<GLfloat> texData(size * 3);
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, hdrTex);
-	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_FLOAT, texData.data());
-
-	float sum = 0.0f;
-
-	for (int i = 0; i < size; i++) {
-		float lum = glm::dot(vec3(texData[i * 3 + 0], texData[i * 3 + 1],
-			texData[i * 3 + 2]),
-			vec3(0.2126f, 0.7152f, 0.0722f));
-		sum += logf(lum + 0.00001f);
-	}
-
-	prog.setUniform("AveLum", expf(sum / size));
-}
-
-//HDR & BLOOM
-void SceneBasic_Uniform::drawScene()
-{
-	vec3 intense = vec3(1.0f);
-	prog.setUniform("Lights[0].L", intense);
-	prog.setUniform("Lights[1].L", intense);
-	prog.setUniform("Lights[2].L", intense);
-
-	vec4 lightPos = vec4(0.0f, 4.0f, 2.5f, 1.0f);
-	lightPos.x = -7.0f;
-	prog.setUniform("Lights[0].Position", view * lightPos);
-	lightPos.x = 0.0f;
-	prog.setUniform("Lights[1].Position", view * lightPos);
-	lightPos.x = 7.0f;
-	prog.setUniform("Lights[2].Position", view * lightPos);
-
-	prog.setUniform("Material.Kd", 0.9f, 0.3f, 0.2f);
-	prog.setUniform("Material.Ks", 1.0f, 1.0f, 1.0f);
-	prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
-	prog.setUniform("Material.Shininess", 100.0f);
-
-	// The backdrop plane
-	model = glm::rotate(mat4(1.0f), glm::radians(90.0f), vec3(1.0f, 0.0f,
-		0.0f));
-	setMatrices();
-	plane.render();
-
-	// The bottom plane
-	model = glm::translate(mat4(1.0f), vec3(0.0f, -5.0f, 0.0f));
-	setMatrices();
-	plane.render();
-
-	// Top plane
-	model = glm::translate(mat4(1.0f), vec3(0.0f, 5.0f, 0.0f));
-	model = glm::rotate(model, glm::radians(180.0f), vec3(1.0f, 0.0f, 0.0f));
-	setMatrices();
-	plane.render();
-
-	prog.setUniform("Material.Kd", vec3(0.4f, 0.9f, 0.4f));
-	model = glm::translate(mat4(1.0f), vec3(-3.0f, -3.0f, 2.0f));
-	setMatrices();
-	sphere.render();
-
-	prog.setUniform("Material.Kd", vec3(0.4f, 0.4f, 0.9f));
-	model = glm::translate(mat4(1.0f), vec3(3.0f, -5.0f, 1.5f));
-	model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
-	setMatrices();
-	teapot.render();
-}
+////HDR & BLOOM
+//void SceneBasic_Uniform::drawScene()
+//{
+//	vec3 intense = vec3(1.0f);
+//	prog.setUniform("Lights[0].L", intense);
+//	prog.setUniform("Lights[1].L", intense);
+//	prog.setUniform("Lights[2].L", intense);
+//
+//	vec4 lightPos = vec4(0.0f, 4.0f, 2.5f, 1.0f);
+//	lightPos.x = -7.0f;
+//	prog.setUniform("Lights[0].Position", view * lightPos);
+//	lightPos.x = 0.0f;
+//	prog.setUniform("Lights[1].Position", view * lightPos);
+//	lightPos.x = 7.0f;
+//	prog.setUniform("Lights[2].Position", view * lightPos);
+//
+//	prog.setUniform("Material.Kd", 0.9f, 0.3f, 0.2f);
+//	prog.setUniform("Material.Ks", 1.0f, 1.0f, 1.0f);
+//	prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
+//	prog.setUniform("Material.Shininess", 100.0f);
+//
+//	// The backdrop plane
+//	model = glm::rotate(mat4(1.0f), glm::radians(90.0f), vec3(1.0f, 0.0f,
+//		0.0f));
+//	setMatrices();
+//	plane.render();
+//
+//	// The bottom plane
+//	model = glm::translate(mat4(1.0f), vec3(0.0f, -5.0f, 0.0f));
+//	setMatrices();
+//	plane.render();
+//
+//	// Top plane
+//	model = glm::translate(mat4(1.0f), vec3(0.0f, 5.0f, 0.0f));
+//	model = glm::rotate(model, glm::radians(180.0f), vec3(1.0f, 0.0f, 0.0f));
+//	setMatrices();
+//	plane.render();
+//
+//	prog.setUniform("Material.Kd", vec3(0.4f, 0.9f, 0.4f));
+//	model = glm::translate(mat4(1.0f), vec3(-3.0f, -3.0f, 2.0f));
+//	setMatrices();
+//	sphere.render();
+//
+//	prog.setUniform("Material.Kd", vec3(0.4f, 0.4f, 0.9f));
+//	model = glm::translate(mat4(1.0f), vec3(3.0f, -5.0f, 1.5f));
+//	model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
+//	setMatrices();
+//	teapot.render();
+//}

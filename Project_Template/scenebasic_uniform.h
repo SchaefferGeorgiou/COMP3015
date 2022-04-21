@@ -57,28 +57,53 @@ private:
     //void computeLogAveLuminance();
     //void drawScene();
 
+    //BLOOM
+    //GLSLProgram prog;
+    //GLuint fsQuad;
+    //GLuint hdrFBO, blurFBO;
+    //GLuint hdrTex, tex1, tex2;
+    //GLuint linearSampler, nearestSampler;
+    //Plane plane;
+    //Sphere sphere;
+    //Teapot teapot;
+    //float angle;
+    //int bloomBufWidth, bloomBufHeight;
+    //void setMatrices();
+    //void compile();
+    //void setupFBO();
+    //void pass1();
+    //void pass2();
+    //void pass3();
+    //void pass4();
+    //void pass5();
+    //float gauss(float, float);
+    //void computeLogAveLuminance();
+    //void drawScene();
+    
+    ////DEFERRED
+    //GLSLProgram prog;
+    //GLuint deferredFBO;
+    //GLuint quad;
+    //Plane plane;
+    //Torus torus;
+    //Teapot teapot;
+    //float angle, tPrev, rotSpeed;
+    //void setMatrices();
+    //void compile();
+    //void setupFBO();
+    //void createGBufTex(GLenum, GLenum, GLuint&);
+    //void pass1();
+    //void pass2();
+
+    //Point Sprite
     GLSLProgram prog;
-    GLuint fsQuad;
-    GLuint hdrFBO, blurFBO;
-    GLuint hdrTex, tex1, tex2;
-    GLuint linearSampler, nearestSampler;
-    Plane plane;
-    Sphere sphere;
-    Teapot teapot;
-    float angle;
-    int bloomBufWidth, bloomBufHeight;
+
+    GLuint sprites;
+    int numSprites;
+    float* locations;
+
     void setMatrices();
     void compile();
-    void setupFBO();
-    void pass1();
-    void pass2();
-    void pass3();
-    void pass4();
-    void pass5();
-    float gauss(float, float);
-    void computeLogAveLuminance();
-    void drawScene();
-    
 
 public:
     SceneBasic_Uniform();

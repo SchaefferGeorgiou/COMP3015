@@ -164,6 +164,21 @@
     <None Include="shader\basic_uniform_Blinn_phong_gamma_correction.vert">
       <Filter>shaders</Filter>
     </None>
+    <None Include="shader\basic_uniform_Blinn_phong_deferred.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader\basic_uniform_Blinn_phong_deferred.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader\basic_uniform_Blinn_phong_point_sprite.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader\basic_uniform_Blinn_phong_point_sprite.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader\basic_uniform_Blinn_phong_point_sprite.geom">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="helper\scene.h">
