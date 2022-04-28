@@ -22,10 +22,10 @@ using glm::vec3;
 using glm::vec4;
 using glm::mat4;
 
-SceneBasic_Uniform::SceneBasic_Uniform()
+SceneBasic_Uniform::SceneBasic_Uniform() : angle(0.0f), tPrev(0.0f), rotSpeed(glm::pi<float>()/8.0f)
 {
 	//mesh = ObjMesh::load("../Project_Template/media/pig_triangulated.obj", true);
-	//ogre = ObjMesh::load("../Project_Template/media/bs_ears.obj",false, true);
+	ogre = ObjMesh::load("../Project_Template/media/bs_ears.obj",false, true);
 }
 
 ////Multiple Light
@@ -452,28 +452,42 @@ SceneBasic_Uniform::SceneBasic_Uniform()
 //	prog.setUniform("Size2", 0.15f);
 //}
 
+////WIREFRAME
+//void SceneBasic_Uniform::initScene()
+//{
+//	compile();
+//
+//	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+//
+//	glEnable(GL_DEPTH_TEST);
+//
+//	float c = 1.5f;
+//
+//	projection = glm::ortho(-0.4f * c, 0.4f * c, -0.3f * c, 0.3f * c, 0.1f, 100.0f);
+//
+//	prog.setUniform("Line.Width", 0.75f);
+//	prog.setUniform("Line.Colour", vec4(0.05f,0.0f,0.05f,1.0f));
+//	prog.setUniform("Material.Ka", 0.2f,0.2f,0.2f);
+//	prog.setUniform("Material.Kd", 0.7f,0.7f,0.7f);
+//	prog.setUniform("Material.Ks", 0.8f, 0.8f, 0.8f);
+//	prog.setUniform("Material.Shininess", 100.0f);
+//	prog.setUniform("Light.Position", vec4(0.0f,0.0f,0.0f,1.0f));
+//	prog.setUniform("Light.Intensity", 1.0f, 1.0f, 1.0f);
+//
+//}
+
+//SILHOUETTE (NOT FINISHED!!!!)
 void SceneBasic_Uniform::initScene()
 {
-
 	compile();
 
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
 	glEnable(GL_DEPTH_TEST);
 
-	float c = 1.5f;
+	angle = glm::half_pi<float>();
 
-	projection = glm::ortho(-0.4f * c, 0.4f * c, -0.3f * c, 0.3f * c, 0.1f, 100.0f);
-
-	prog.setUniform("Line.Width", 0.75f);
-	prog.setUniform("Line.Colour", vec4(0.05f,0.0f,0.05f,1.0f));
-	prog.setUniform("Material.Ka", 0.2f,0.2f,0.2f);
-	prog.setUniform("Material.Kd", 0.7f,0.7f,0.7f);
-	prog.setUniform("Material.Ks", 0.8f, 0.8f, 0.8f);
-	prog.setUniform("Material.Shininess", 100.0f);
-	prog.setUniform("Light.Position", 0.75f);
-	prog.setUniform("Light.Intensity", 1.0f, 1.0f, 1.0f);
-
+	prog setUnif
 }
 
 void SceneBasic_Uniform::compile()
@@ -512,7 +526,10 @@ void SceneBasic_Uniform::setMatrices()
 	mat4 mv = view * model;
 
 	prog.setUniform("ModelViewMatrix", mv);
-	prog.setUniform("ProjectionMatrix", projection);
+	prog.setUniform("NormalMatrix", glm::mat3(vec3(mv[0]), vec3(mv[1]), vec3(mv[2])));
+	prog.setUniform("MVP", projection * mv);
+	prog.setUniform("ProjectionMatrix", viewport);
+
 }
 
 void SceneBasic_Uniform::update( float t )
@@ -641,7 +658,27 @@ void SceneBasic_Uniform::update( float t )
 //
 //}
 
-//GEOM SHADER
+
+////POINT SPRITE
+//void SceneBasic_Uniform::render()
+//{
+//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//
+//	vec3 cameraPos(0.0f, 0.0f, 3.0f);
+//	view = glm::lookAt(cameraPos,
+//						vec3(0.0f, 0.0f, 0.0f),
+//						vec3(0.0f, 1.0f, 0.0f));
+//
+//	model = mat4(1.0f);
+//	setMatrices();
+//
+//	glBindVertexArray(sprites);
+//	glDrawArrays(GL_POINTS, 0, numSprites);
+//
+//	glFinish();
+//}
+
+//WIREFRAME
 void SceneBasic_Uniform::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -653,19 +690,21 @@ void SceneBasic_Uniform::render()
 
 	model = mat4(1.0f);
 	setMatrices();
-
-	glBindVertexArray(sprites);
-	glDrawArrays(GL_POINTS, 0, numSprites);
+	ogre->render();
 
 	glFinish();
 }
 
+
 void SceneBasic_Uniform::resize(int w, int h)
 {
 	glViewport(0, 0, w, h);
-	width = w;
-	height = h;
-	projection = glm::perspective(glm::radians(70.0f), (float)w / h, 0.3f, 100.0f);
+	float w2 = w / 2.0f;
+	float h2 = w / 2.0f;
+	viewport = mat4(vec4(w2, 0.0f,0.0f,0.0f),
+					  vec4(0.0f,h2, 0.0f, 0.0f),
+					  vec4(0.0f, 0.0f, 1.0f, 0.0f),
+					  vec4(w2 + 0, h2 + 0, 0.0f, 1.0f));
 }
 
 ////EDGE DETECTION\\\\

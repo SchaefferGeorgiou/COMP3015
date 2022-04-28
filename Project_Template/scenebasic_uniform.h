@@ -105,10 +105,18 @@ private:
     //void setMatrices();
     //void compile();
 
-    //Wireframe
+    ////Wireframe
+    //GLSLProgram prog;
+    //std::unique_ptr<ObjMesh> ogre;
+    //glm::mat4 viewport;
+
+    //void setMatrices();
+    //void compile();
+
+    //Silhouette
     GLSLProgram prog;
     std::unique_ptr<ObjMesh> ogre;
-    glm::mat4 viewport;
+    float angle, tPrev, rotSpeed;
 
     void setMatrices();
     void compile();

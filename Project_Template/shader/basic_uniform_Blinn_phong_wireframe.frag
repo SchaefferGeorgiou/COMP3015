@@ -8,6 +8,7 @@ uniform struct LightInfo {
 
 }Light;
 
+
 uniform struct MaterialInfo {
 
 	vec3 Ka;
@@ -16,6 +17,7 @@ uniform struct MaterialInfo {
 	float Shininess;
 
 }Material;
+
 
 uniform struct LineInfo{
 
@@ -31,13 +33,15 @@ noperspective in vec3 GEdgeDistance;
 layout (location = 0) out vec4 FragColour;
 
 vec3 blinnPhong(vec3 position, vec3 n) 
-{
+{    
 
-    
+    vec3 ambient = Light.Intensity * Material.Ka;
+
     vec3 s = normalize(((Light.Position).xyz - position)); //calculate s vector
     
-    float sDotn = max(dot(s,n), 0.0f) ; //calculate dot product between s and n
+    float sDotn = max(dot(s,n), 0.0f) ; //calculate dot product between s and n  
     
+
     vec3 diffuse = Light.Intensity * Material.Kd * sDotn; //calculate the diffuse
         
     vec3 specular = vec3(0.0f);
@@ -49,7 +53,7 @@ vec3 blinnPhong(vec3 position, vec3 n)
         specular = Material.Ks * pow(max( dot(h,n), 0.0), Material.Shininess); 
     }     
 
-    return  diffuse + specular;
+    return  ambient + diffuse + specular;
 }
 
 void main()
@@ -64,7 +68,7 @@ void main()
     {
         mixVal = 1.0;
     }
-    else if(d < Line.Width + 1)
+    else if(d > Line.Width + 1)
     {
         mixVal = 0.0;
     }

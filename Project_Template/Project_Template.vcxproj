@@ -183,6 +183,9 @@
     <None Include="shader\basic_uniform_Blinn_phong_point_sprite.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_point_sprite.geom" />
     <None Include="shader\basic_uniform_Blinn_phong_point_sprite.vert" />
+    <None Include="shader\basic_uniform_Blinn_phong_silhouette.frag" />
+    <None Include="shader\basic_uniform_Blinn_phong_silhouette.geom" />
+    <None Include="shader\basic_uniform_Blinn_phong_silhouette.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_skybox.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_skybox.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_spotlight.frag" />
