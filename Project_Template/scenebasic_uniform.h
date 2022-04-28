@@ -95,12 +95,20 @@ private:
     //void pass1();
     //void pass2();
 
-    //Point Sprite
-    GLSLProgram prog;
+    ////Point Sprite
+    //GLSLProgram prog;
 
-    GLuint sprites;
-    int numSprites;
-    float* locations;
+    //GLuint sprites;
+    //int numSprites;
+    //float* locations;
+
+    //void setMatrices();
+    //void compile();
+
+    //Wireframe
+    GLSLProgram prog;
+    std::unique_ptr<ObjMesh> ogre;
+    glm::mat4 viewport;
 
     void setMatrices();
     void compile();

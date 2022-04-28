@@ -191,6 +191,9 @@
     <None Include="shader\basic_uniform_Blinn_phong_texture.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_toon.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_toon.vert" />
+    <None Include="shader\basic_uniform_Blinn_phong_wireframe.frag" />
+    <None Include="shader\basic_uniform_Blinn_phong_wireframe.geom" />
+    <None Include="shader\basic_uniform_Blinn_phong_wireframe.vert" />
     <None Include="shader\basic_uniform_diffuse.frag" />
     <None Include="shader\basic_uniform_diffuse.vert" />
     <None Include="shader\basic_uniform_phong.frag" />

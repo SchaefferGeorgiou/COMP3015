@@ -404,61 +404,85 @@ SceneBasic_Uniform::SceneBasic_Uniform()
 //	prog.setUniform("Light.L", vec3(1.0f));
 //}
 
+////Sprites
+//void SceneBasic_Uniform::initScene()
+//{
+//	compile();
+//
+//	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+//
+//	glEnable(GL_DEPTH_TEST);
+//
+//	numSprites = 50;
+//	locations = new float[numSprites * 3];
+//	srand((unsigned int)time(0));
+//
+//	for (size_t i = 0; i < numSprites; i++)
+//	{
+//		vec3 p(((float)rand() / RAND_MAX * 2.0F) - 1.0F,
+//			((float)rand() / RAND_MAX * 2.0f) - 1.0f,
+//			((float)rand() / RAND_MAX * 2.0f) - 1.0f);
+//
+//		locations[i * 3] = p.x;
+//		locations[i * 3 + 1] = p.y;
+//		locations[i * 3 + 2] = p.z;
+//	}
+//
+//	GLuint handle;
+//	glGenBuffers(1, &handle);
+//
+//	glBindBuffer(GL_ARRAY_BUFFER, handle);
+//	glBufferData(GL_ARRAY_BUFFER, numSprites * 3 * sizeof(float), locations, GL_STATIC_DRAW);
+//
+//	delete[] locations;
+//
+//	glGenVertexArrays(1, &sprites);
+//	glBindVertexArray(sprites);
+//
+//	glBindBuffer(GL_ARRAY_BUFFER, handle);
+//	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, ((GLubyte*)NULL + (0)));
+//	glEnableVertexAttribArray(0);
+//
+//	glBindVertexArray(0);
+//
+//	const char* texName = "media/texture/flower.png";
+//	Texture::loadTexture(texName);
+//
+//	prog.setUniform("SpriteTex", 0);
+//	prog.setUniform("Size2", 0.15f);
+//}
+
 void SceneBasic_Uniform::initScene()
 {
+
 	compile();
 
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
 	glEnable(GL_DEPTH_TEST);
 
-	numSprites = 50;
-	locations = new float[numSprites * 3];
-	srand((unsigned int)time(0));
+	float c = 1.5f;
 
-	for (size_t i = 0; i < numSprites; i++)
-	{
-		vec3 p(((float)rand() / RAND_MAX * 2.0F) - 1.0F,
-			((float)rand() / RAND_MAX * 2.0f) - 1.0f,
-			((float)rand() / RAND_MAX * 2.0f) - 1.0f);
+	projection = glm::ortho(-0.4f * c, 0.4f * c, -0.3f * c, 0.3f * c, 0.1f, 100.0f);
 
-		locations[i * 3] = p.x;
-		locations[i * 3 + 1] = p.y;
-		locations[i * 3 + 2] = p.z;
-	}
+	prog.setUniform("Line.Width", 0.75f);
+	prog.setUniform("Line.Colour", vec4(0.05f,0.0f,0.05f,1.0f));
+	prog.setUniform("Material.Ka", 0.2f,0.2f,0.2f);
+	prog.setUniform("Material.Kd", 0.7f,0.7f,0.7f);
+	prog.setUniform("Material.Ks", 0.8f, 0.8f, 0.8f);
+	prog.setUniform("Material.Shininess", 100.0f);
+	prog.setUniform("Light.Position", 0.75f);
+	prog.setUniform("Light.Intensity", 1.0f, 1.0f, 1.0f);
 
-	GLuint handle;
-	glGenBuffers(1, &handle);
-
-	glBindBuffer(GL_ARRAY_BUFFER, handle);
-	glBufferData(GL_ARRAY_BUFFER, numSprites * 3 * sizeof(float), locations, GL_STATIC_DRAW);
-
-	delete[] locations;
-
-	glGenVertexArrays(1, &sprites);
-	glBindVertexArray(sprites);
-
-	glBindBuffer(GL_ARRAY_BUFFER, handle);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, ((GLubyte*)NULL + (0)));
-	glEnableVertexAttribArray(0);
-
-	glBindVertexArray(0);
-
-	const char* texName = "media/texture/flower.png";
-	Texture::loadTexture(texName);
-
-	prog.setUniform("SpriteTex", 0);
-	prog.setUniform("Size2", 0.15f);
 }
 
 void SceneBasic_Uniform::compile()
 {
 	try {
-		prog.compileShader("shader/basic_uniform_Blinn_phong_point_sprite.vert");
-		prog.compileShader("shader/basic_uniform_Blinn_phong_point_sprite.geom");
-		prog.compileShader("shader/basic_uniform_Blinn_phong_point_sprite.frag");
+		prog.compileShader("shader/basic_uniform_Blinn_phong_wireframe.vert");
+		prog.compileShader("shader/basic_uniform_Blinn_phong_wireframe.geom");
+		prog.compileShader("shader/basic_uniform_Blinn_phong_wireframe.frag");
 		
-
 
 		prog.link();
 		prog.use();
