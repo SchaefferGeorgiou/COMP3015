@@ -113,7 +113,7 @@ private:
     //void setMatrices();
     //void compile();
 
-    //Silhouette
+    //Silhouette (WEEK 6 TESSELATION NOT DONE)
     GLSLProgram prog;
     std::unique_ptr<ObjMesh> ogre;
     float angle, tPrev, rotSpeed;

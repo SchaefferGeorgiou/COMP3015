@@ -4,10 +4,9 @@
 layout (triangles_adjacency) in;
 layout (triangle_strip, max_vertices = 15) out;
 
-out vec3 GeomNormal;
-out vec3 GeomPosition;
 
-noperspective out vec3 GEdgeDistance;
+out vec3 GeomPosition;
+out vec3 GeomNormal;
 
 flat out int GIsEdge;
 
@@ -31,13 +30,13 @@ void emitEdgeQuad(vec3 e0, vec3 e1)
 
 	GIsEdge = 1;
 
-	gl_Position = vec4(e0.xy - ext, e0.z, 1.0f);
+	gl_Position = vec4(e0.xy - ext, e0.z, 1.0);
 	EmitVertex();
-	gl_Position = vec4(e0.xy - n, e0.z, 1.0f);
+	gl_Position = vec4(e0.xy - n - ext, e0.z, 1.0);
 	EmitVertex();
-	gl_Position = vec4(e1.xy + ext, e1.z, 1.0f);
+	gl_Position = vec4(e1.xy + ext, e1.z, 1.0);
 	EmitVertex();
-	gl_Position = vec4(e1.xy - n + ext, e1.z, 1.0f);
+	gl_Position = vec4(e1.xy - n + ext, e1.z, 1.0);
 	EmitVertex();
 
 	EndPrimitive();
@@ -61,7 +60,7 @@ void main()
 			emitEdgeQuad(p2,p4);
 
 		if (! isFrontFacing(p4,p5,p0)) 
-			emitEdgeQuad(p0,p2);
+			emitEdgeQuad(p4,p0);
 	}
 
 	GIsEdge = 0;
@@ -80,7 +79,6 @@ void main()
 	GeomPosition = VertexPosition[4];
 	gl_Position = gl_in[4].gl_Position;
 	EmitVertex();
-
 
 	EndPrimitive();
 }
