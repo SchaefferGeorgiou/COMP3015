@@ -190,6 +190,8 @@
     <None Include="shader\basic_uniform_Blinn_phong_skybox.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_spotlight.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_spotlight.vert" />
+    <None Include="shader\basic_uniform_Blinn_phong_surface_animation.frag" />
+    <None Include="shader\basic_uniform_Blinn_phong_surface_animation.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_texture.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_texture.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_toon.frag" />

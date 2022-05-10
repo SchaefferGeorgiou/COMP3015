@@ -113,12 +113,20 @@ private:
     //void setMatrices();
     //void compile();
 
-    //Silhouette (WEEK 6 TESSELATION NOT DONE)
+    ////Silhouette (WEEK 6 TESSELATION NOT DONE)
+    //GLSLProgram prog;
+    //std::unique_ptr<ObjMesh> ogre;
+    //float angle, tPrev, rotSpeed;
+    //void setMatrices();
+    //void compile();
+
     GLSLProgram prog;
-    std::unique_ptr<ObjMesh> ogre;
-    float angle, tPrev, rotSpeed;
+    Plane plane;
+
+    float angle, time;
 
     void setMatrices();
+
     void compile();
 
 public:

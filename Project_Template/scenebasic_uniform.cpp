@@ -22,11 +22,20 @@ using glm::vec3;
 using glm::vec4;
 using glm::mat4;
 
-SceneBasic_Uniform::SceneBasic_Uniform() : angle(0.0f), tPrev(0.0f), rotSpeed(glm::pi<float>()/8.0f)
+////Silhouette
+//SceneBasic_Uniform::SceneBasic_Uniform() : angle(0.0f), tPrev(0.0f), rotSpeed(glm::pi<float>()/8.0f)
+//{
+//	//mesh = ObjMesh::load("../Project_Template/media/pig_triangulated.obj", true);
+//	ogre = ObjMesh::loadWithAdjacency("../Project_Template/media/bs_ears.obj");
+//}
+
+
+SceneBasic_Uniform::SceneBasic_Uniform() : time(0), plane(13.0f, 10.0f, 200, 2)
 {
-	//mesh = ObjMesh::load("../Project_Template/media/pig_triangulated.obj", true);
-	ogre = ObjMesh::loadWithAdjacency("../Project_Template/media/bs_ears.obj");
+
 }
+
+#pragma region initScene
 
 ////Multiple Light
 //void SceneBasic_Uniform::initScene()
@@ -476,7 +485,27 @@ SceneBasic_Uniform::SceneBasic_Uniform() : angle(0.0f), tPrev(0.0f), rotSpeed(gl
 //
 //}
 
-//SILHOUETTE
+////SILHOUETTE
+//void SceneBasic_Uniform::initScene()
+//{
+//	compile();
+//
+//	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+//
+//	glEnable(GL_DEPTH_TEST);
+//
+//	angle = glm::half_pi<float>();
+//
+//	prog.setUniform("EdgeWidth", 0.005f);
+//	prog.setUniform("PctExtend", 0.25f);
+//	prog.setUniform("LineColour", vec4(1.0f, 1.0f, 1.0f, 1.0f));
+//	prog.setUniform("Material.Ka", vec3(0.2f, 0.2f, 0.2f));
+//	prog.setUniform("Material.Kd", vec3(0.9f, 0.5f, 0.2f));
+//	prog.setUniform("Light.Position", vec4(0.0f,5.0f,-3.0f,1.0f));
+//	prog.setUniform("Light.Intensity", vec3(1.0f,1.0f,1.0f));	
+//}
+
+//SURFACE ANIMATION
 void SceneBasic_Uniform::initScene()
 {
 	compile();
@@ -485,25 +514,18 @@ void SceneBasic_Uniform::initScene()
 
 	glEnable(GL_DEPTH_TEST);
 
+	prog.setUniform("Light.Intensity", vec3(1.0f, 1.0f, 1.0f));
+	prog.setUniform("Light.Position", vec3(0.0f, 1.0f, 1.0f));
 	angle = glm::half_pi<float>();
-
-	prog.setUniform("EdgeWidth", 0.005f);
-	prog.setUniform("PctExtend", 0.25f);
-	prog.setUniform("LineColour", vec4(0.0f,0.0f,0.9f, 1.0f));
-	prog.setUniform("Material.Ka", vec3(0.2f, 0.2f, 0.2f));
-	prog.setUniform("Material.Kd", vec3(0.9f, 0.5f, 0.2f));
-	prog.setUniform("Light.Position", vec4(0.0f,5.0f,-3.0f,1.0f));
-	prog.setUniform("Light.Intensity", vec3(1.0f,1.0f,1.0f));
-
-	
 }
+
+#pragma endregion
 
 void SceneBasic_Uniform::compile()
 {
 	try {
-		prog.compileShader("shader/basic_uniform_Blinn_phong_silhouette.vert");
-		prog.compileShader("shader/basic_uniform_Blinn_phong_silhouette.geom");
-		prog.compileShader("shader/basic_uniform_Blinn_phong_silhouette.frag");
+		prog.compileShader("shader/basic_uniform_Blinn_phong_surface_animation.vert");
+		prog.compileShader("shader/basic_uniform_Blinn_phong_surface_animation.frag");
 		
 
 		prog.link();
@@ -514,6 +536,7 @@ void SceneBasic_Uniform::compile()
 	}
 }
 
+#pragma region setMatrices
 
 ////WEEK 1-5
 //void SceneBasic_Uniform::setMatrices()
@@ -541,7 +564,18 @@ void SceneBasic_Uniform::compile()
 //
 //}
 
-//SILHOUETTE
+////SILHOUETTE
+//void SceneBasic_Uniform::setMatrices()
+//{
+//	mat4 mv = view * model;
+//
+//	prog.setUniform("ModelViewMatrix", mv);
+//	prog.setUniform("NormalMatrix", glm::mat3(vec3(mv[0]), vec3(mv[1]), vec3(mv[2])));
+//	prog.setUniform("MVP", projection * mv);
+//
+//}
+
+//SURFACE ANIMATION
 void SceneBasic_Uniform::setMatrices()
 {
 	mat4 mv = view * model;
@@ -552,25 +586,27 @@ void SceneBasic_Uniform::setMatrices()
 
 }
 
+#pragma endregion
+
 void SceneBasic_Uniform::update( float t )
 {
-	float deltaT = t - tPrev;
+	//float deltaT = t - tPrev;
+	//if (tPrev == 0.0f)
+	//{
+	//	deltaT = 0.0f;
+	//}		
+	//tPrev = t;
+	//angle += rotSpeed * deltaT;
+	//
+	//if (angle > glm::two_pi<float>())
+	//{
+	//	angle -= glm::two_pi<float>();		
+	//}
 
-	if (tPrev == 0.0f)
-	{
-		deltaT = 0.0f;
-	}		
-	tPrev = t;
-	angle += rotSpeed * deltaT;
-	
-
-	if (angle > glm::two_pi<float>())
-	{
-		angle -= glm::two_pi<float>();		
-	}
-
-		
+	time = t;
 }
+
+#pragma region render
 
 ////WEEK 1-5
 //void SceneBasic_Uniform::render()
@@ -714,22 +750,47 @@ void SceneBasic_Uniform::update( float t )
 //	glFinish();
 //}
 
-//SILHOUETTE
+////SILHOUETTE
+//void SceneBasic_Uniform::render()
+//{
+//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//
+//	vec3 cameraPos(1.5f * cos(angle), 0.0f, 1.5f * sin(angle));
+//	view = glm::lookAt(cameraPos,
+//		vec3(0.0f, -0.2f, 0.0f),
+//		vec3(0.0f, 1.0f, 0.0f));
+//
+//	model = mat4(1.0f);
+//	setMatrices();
+//	ogre->render();
+//
+//	glFinish();
+//}
+
+//SURFACE ANIMATION
 void SceneBasic_Uniform::render()
 {
+	prog.setUniform("Time", time);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	vec3 cameraPos(1.5f * cos(angle), 0.0f, 1.5f * sin(angle));
-	view = glm::lookAt(cameraPos,
-		vec3(0.0f, -0.2f, 0.0f),
-		vec3(0.0f, 1.0f, 0.0f));
+	
+	view = glm::lookAt(vec3(10.0f * cos(angle),4.0f,10.0f * sin(angle)), vec3(0.0f,0.0f,0.0f), vec3(0.0f, 1.0f, 0.0f));
+	projection = glm::perspective(glm::radians(60.0f), (float)width / height, 0.3f, 100.0f);
+
+	prog.setUniform("Material.Ka", vec3(0.2f, 0.5f, 0.9f));
+	prog.setUniform("Material.Kd", vec3(0.2f,0.2f,0.2f));
+	prog.setUniform("Material.Ks", vec3(0.8f, 0.8f, 0.8f));
+	prog.setUniform("Material.Shininess", 100.0f);
+	prog.setUniform("Light.Intensity", vec3(1.0f, 1.0f, 1.0f));
 
 	model = mat4(1.0f);
+	model = glm::rotate(model, glm::radians(-10.0f), vec3(0.0f, 0.0f, 1.0f));
+	model - glm::rotate(model, glm::radians(50.0f), vec3(1.0f, 0.0f, 0.0f));
 	setMatrices();
-	ogre->render();
-
-	glFinish();
+	plane.render();
 }
+
+#pragma endregion
 
 ////WIREFRAME
 //void SceneBasic_Uniform::resize(int w, int h)
@@ -743,12 +804,21 @@ void SceneBasic_Uniform::render()
 //					  vec4(w2 + 0, h2 + 0, 0.0f, 1.0f));
 //}
 
-//SILHOUETTE
+////SILHOUETTE
+//void SceneBasic_Uniform::resize(int w, int h)
+//{
+//	glViewport(0, 0, w, h);
+//	float c = 1.5f;
+//	projection = glm::ortho(-0.4f * c, 0.4f * c, -0.3f * c, 0.3f * c, 0.01f, 100.0f);
+//}
+
+//SURFACE ANIMATION
 void SceneBasic_Uniform::resize(int w, int h)
 {
 	glViewport(0, 0, w, h);
-	float c = 1.5f;
-	projection = glm::ortho(-0.4f * c, 0.4f * c, -0.3f * c, 0.3f * c, 0.01f, 100.0f);
+	width = w;
+	height = h;
+	projection = glm::perspective(glm::radians(60.0f), (float)w / h, 0.3f, 100.0f);
 }
 
 ////EDGE DETECTION\\\\
