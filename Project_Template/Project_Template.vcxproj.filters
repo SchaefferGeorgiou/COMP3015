@@ -72,6 +72,9 @@
     <ClCompile Include="helper\sphere.cpp">
       <Filter>helper</Filter>
     </ClCompile>
+    <ClCompile Include="helper\frustum.cpp">
+      <Filter>helper</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\basic_uniform_diffuse.frag">
@@ -203,6 +206,12 @@
     <None Include="shader\basic_uniform_Blinn_phong_surface_animation.vert">
       <Filter>shaders</Filter>
     </None>
+    <None Include="shader\basic_uniform_Blinn_phong_shadow_map.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader\basic_uniform_Blinn_phong_shadow_map.vert">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="helper\scene.h">
@@ -263,6 +272,9 @@
       <Filter>helper</Filter>
     </ClInclude>
     <ClInclude Include="helper\sphere.h">
+      <Filter>helper</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\frustum.h">
       <Filter>helper</Filter>
     </ClInclude>
   </ItemGroup>

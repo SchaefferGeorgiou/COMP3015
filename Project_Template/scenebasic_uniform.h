@@ -7,6 +7,7 @@
 #include "helper/glslprogram.h"
 #include "helper/torus.h"
 #include "helper/teapot.h"
+#include "helper/frustum.h"
 
 #include "helper/plane.h"
 #include "helper/objmesh.h"
@@ -120,14 +121,36 @@ private:
     //void setMatrices();
     //void compile();
 
-    GLSLProgram prog;
-    Plane plane;
+    ////SURFACE ANIMATION
+    //GLSLProgram prog;
+    //Plane plane;
+    //float angle, time;
+    //void setMatrices();
+    //void compile();
 
-    float angle, time;
+    //SHADOW MAP
+    GLSLProgram prog, solidProg;
+    GLuint shadowFBO, pass1Index, pass2Index;
+
+    Teapot teapot;
+    Plane plane;
+    Torus torus;
+
+    int shadowMapWidth, shadowMapHeight;
+    float tPrev;
+
+    glm::mat4 lightPV, shadowBias;
+    float angle;
+
+    Frustum lightFrustrum;
 
     void setMatrices();
 
     void compile();
+
+    void setupFBO();
+    void drawScene();
+    void spitOutDepthBuffer();
 
 public:
     SceneBasic_Uniform();

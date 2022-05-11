@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClCompile Include="glad.c" />
     <ClCompile Include="helper\cube.cpp" />
+    <ClCompile Include="helper\frustum.cpp" />
     <ClCompile Include="helper\glslprogram.cpp" />
     <ClCompile Include="helper\glutils.cpp" />
     <ClCompile Include="helper\objmesh.cpp" />
@@ -183,6 +184,8 @@
     <None Include="shader\basic_uniform_Blinn_phong_point_sprite.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_point_sprite.geom" />
     <None Include="shader\basic_uniform_Blinn_phong_point_sprite.vert" />
+    <None Include="shader\basic_uniform_Blinn_phong_shadow_map.frag" />
+    <None Include="shader\basic_uniform_Blinn_phong_shadow_map.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_silhouette.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_silhouette.geom" />
     <None Include="shader\basic_uniform_Blinn_phong_silhouette.vert" />
@@ -210,6 +213,7 @@
     <ClInclude Include="helper\aabb.h" />
     <ClInclude Include="helper\cube.h" />
     <ClInclude Include="helper\drawable.h" />
+    <ClInclude Include="helper\frustum.h" />
     <ClInclude Include="helper\glslprogram.h" />
     <ClInclude Include="helper\glutils.h" />
     <ClInclude Include="helper\objmesh.h" />
