@@ -128,29 +128,33 @@ private:
     //void setMatrices();
     //void compile();
 
-    //SHADOW MAP
-    GLSLProgram prog, solidProg;
-    GLuint shadowFBO, pass1Index, pass2Index;
+    ////SHADOW MAP
+    //GLSLProgram prog, solidProg;
+    //GLuint shadowFBO, pass1Index, pass2Index;
+    //Teapot teapot;
+    //Plane plane;
+    //Torus torus;
+    //int shadowMapWidth, shadowMapHeight;
+    //float tPrev;
+    //glm::mat4 lightPV, shadowBias;
+    //float angle;
+    //Frustum lightFrustrum;
+    //void setMatrices();
+    //void compile();
+    //void setupFBO();
+    //void drawScene();
+    //void spitOutDepthBuffer();
 
-    Teapot teapot;
-    Plane plane;
-    Torus torus;
+    GLSLProgram prog;
 
-    int shadowMapWidth, shadowMapHeight;
-    float tPrev;
+    GLuint quad;
 
-    glm::mat4 lightPV, shadowBias;
+    glm::vec3 lightPos;
     float angle;
 
-    Frustum lightFrustrum;
-
     void setMatrices();
-
     void compile();
-
-    void setupFBO();
     void drawScene();
-    void spitOutDepthBuffer();
 
 public:
     SceneBasic_Uniform();

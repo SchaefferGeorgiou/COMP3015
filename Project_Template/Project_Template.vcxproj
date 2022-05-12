@@ -166,6 +166,8 @@
     <None Include="shader\basic_uniform_Blinn_phong_alpha.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_bloom.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_bloom.vert" />
+    <None Include="shader\basic_uniform_Blinn_phong_cloud_effect.frag" />
+    <None Include="shader\basic_uniform_Blinn_phong_cloud_effect.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_deferred.frag" />
     <None Include="shader\basic_uniform_Blinn_phong_deferred.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_edge_detection.frag" />

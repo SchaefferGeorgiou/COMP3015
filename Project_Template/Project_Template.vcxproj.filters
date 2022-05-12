@@ -218,6 +218,12 @@
     <None Include="shader\solid.vert">
       <Filter>shaders</Filter>
     </None>
+    <None Include="shader\basic_uniform_Blinn_phong_cloud_effect.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader\basic_uniform_Blinn_phong_cloud_effect.vert">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="helper\scene.h">

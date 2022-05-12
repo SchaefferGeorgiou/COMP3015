@@ -43,7 +43,7 @@ vec3 blinnPhong()
         specular = Material.Ks * pow(max( dot(h,Normal), 0.0), Material.Shininess); 
     }
 
-    return diffuse + specular;
+    return Light.Intensity *(diffuse + specular);
 }
 
 subroutine void RenderPassType();
@@ -65,9 +65,9 @@ void shadeWithShadow()
     FragColour = vec4(diffAndSpec * shadow + ambient,1.0);
 
     FragColour = pow(FragColour, vec4(1.0/2.2));
-
 }
 
+subroutine (RenderPassType)
 void recordDepth()
 {
 
