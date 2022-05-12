@@ -583,8 +583,8 @@ void SceneBasic_Uniform::compile()
 		prog.link();
 		prog.use();
 
-		solidProg.compileShader("shader/solid.vs", GLSLShader::VERTEX);
-		solidProg.compileShader("shader/solid.fs", GLSLShader::FRAGMENT);
+		solidProg.compileShader("shader/solid.vert", GLSLShader::VERTEX);
+		solidProg.compileShader("shader/solid.frag", GLSLShader::FRAGMENT);
 		solidProg.link();
 	}
 	catch (GLSLProgramException& e) {
@@ -1559,7 +1559,7 @@ void SceneBasic_Uniform::drawScene()
 	prog.setUniform("Material.Ks", vec3(0.9f));
 	prog.setUniform("Material.Shininess", 150.0f);
 	model = mat4(1.0f);
-
+	model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
 	setMatrices();
 	teapot.render();
 
@@ -1569,7 +1569,8 @@ void SceneBasic_Uniform::drawScene()
 	prog.setUniform("Material.Ks", vec3(0.9f));
 	prog.setUniform("Material.Shininess", 150.0f);
 	model = mat4(1.0f);
-	model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
+	model = glm::translate(model, vec3(0.0f, 2.0f, 5.0f));
+	model = glm::rotate(model, glm::radians(-45.0f), vec3(1.0f, 0.0f, 0.0f));
 	setMatrices();
 	torus.render();
 
@@ -1578,8 +1579,6 @@ void SceneBasic_Uniform::drawScene()
 	prog.setUniform("Material.Ks", vec3(0.0f));
 	prog.setUniform("Material.Shininess", 1.0f);
 	model = mat4(1.0f);
-	model = glm::translate(model, vec3(0.0f, 2.0f, 5.0f));
-	model = glm::rotate(model, glm::radians(-45.0f), vec3(1.0f, 0.0f, 0.0f));
 	setMatrices();
 	plane.render();
 

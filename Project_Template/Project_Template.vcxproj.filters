@@ -212,6 +212,12 @@
     <None Include="shader\basic_uniform_Blinn_phong_shadow_map.vert">
       <Filter>shaders</Filter>
     </None>
+    <None Include="shader\solid.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader\solid.vert">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="helper\scene.h">

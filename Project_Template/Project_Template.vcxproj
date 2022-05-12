@@ -208,6 +208,8 @@
     <None Include="shader\basic_uniform_phong.vert" />
     <None Include="shader\basic_uniform_phong_multiple.frag" />
     <None Include="shader\basic_uniform_phong_multiple.vert" />
+    <None Include="shader\solid.frag" />
+    <None Include="shader\solid.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="helper\aabb.h" />
