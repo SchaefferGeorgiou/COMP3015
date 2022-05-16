@@ -14,6 +14,7 @@
 #include "helper/cube.h"
 #include "helper/skybox.h"
 #include "helper/sphere.h"
+#include "helper/noisetex.h"
 
 class SceneBasic_Uniform : public Scene
 {
@@ -98,11 +99,9 @@ private:
 
     ////Point Sprite
     //GLSLProgram prog;
-
     //GLuint sprites;
     //int numSprites;
     //float* locations;
-
     //void setMatrices();
     //void compile();
 
@@ -110,7 +109,6 @@ private:
     //GLSLProgram prog;
     //std::unique_ptr<ObjMesh> ogre;
     //glm::mat4 viewport;
-
     //void setMatrices();
     //void compile();
 
@@ -150,7 +148,7 @@ private:
     GLuint quad;
 
     glm::vec3 lightPos;
-    float angle;
+    //float angle;
 
     void setMatrices();
     void compile();

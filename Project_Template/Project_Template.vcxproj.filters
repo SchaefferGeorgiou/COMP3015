@@ -75,6 +75,9 @@
     <ClCompile Include="helper\frustum.cpp">
       <Filter>helper</Filter>
     </ClCompile>
+    <ClCompile Include="helper\noisetex.cpp">
+      <Filter>helper</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\basic_uniform_diffuse.frag">
@@ -287,6 +290,9 @@
       <Filter>helper</Filter>
     </ClInclude>
     <ClInclude Include="helper\frustum.h">
+      <Filter>helper</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\noisetex.h">
       <Filter>helper</Filter>
     </ClInclude>
   </ItemGroup>

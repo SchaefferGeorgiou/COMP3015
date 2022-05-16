@@ -2,7 +2,7 @@
 
 #define PI 3.14159265
 
-in vec2 TexCoord;
+
 
 uniform vec4 Colour;
 
@@ -11,6 +11,7 @@ uniform sampler2D NoiseTex;
 uniform vec4 SkyColour = vec4(0.3,0.3,0.9,1.0);
 uniform vec4 CloudColour = vec4(1.0,1.0,1.0,1.0);
 
+in vec2 TexCoord;
 
 layout (location = 0) out vec4 FragColour;
 

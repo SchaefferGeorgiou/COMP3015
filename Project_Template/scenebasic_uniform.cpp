@@ -17,7 +17,7 @@ using std::endl;
 #include <sstream>
 
 #include "helper/texture.h"
-#include "helper/noisetex.h"
+
 
 using glm::vec3;
 using glm::vec4;
@@ -116,7 +116,7 @@ SceneBasic_Uniform::SceneBasic_Uniform()
 //	
 //}
 
-//Skybox
+////Skybox
 //void SceneBasic_Uniform::initScene()
 //{
 //	compile();
@@ -576,8 +576,12 @@ void SceneBasic_Uniform::initScene()
 
 	GLfloat verts[] =
 	{
-		-1.0f,-1.0f, 0.0f,1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		-1.0,-1.0, 0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f
+		-1.0f, -1.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,
+		-1.0, -1.0, 0.0f,
+		1.0f, 1.0f, 0.0f,
+		-1.0f, 1.0f, 0.0f
 	};
 	GLfloat tc[] =
 	{
@@ -598,7 +602,7 @@ void SceneBasic_Uniform::initScene()
 	glBindVertexArray(quad);
 
 	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
-	glVertexAttribPointer((GLuint)2, 2, GL_FLOAT, GL_FALSE, 0, ((GLubyte*)NULL + (0)));
+	glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, ((GLubyte*)NULL + (0)));
 	glEnableVertexAttribArray(0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
