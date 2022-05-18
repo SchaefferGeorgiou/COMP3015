@@ -143,12 +143,12 @@ private:
     //void drawScene();
     //void spitOutDepthBuffer();
 
-    GLSLProgram prog;
+    GLSLProgram progOne;
 
-    GLuint quad;
+    Plane plane;
 
-    glm::vec3 lightPos;
-    //float angle;
+
+    float angle;
 
     void setMatrices();
     void compile();
