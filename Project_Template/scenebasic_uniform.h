@@ -28,16 +28,18 @@ private:
     Plane plane;
 
     float angle;
-    int pass;
+    
 
-    void setMatrices();
+    void setMatrices(GLSLProgram&);
     void compile();
 
-    void setupFBO();
+    void createQuad();
     void createGBufTex(GLenum, GLenum, GLuint&);
+    void setupFBO();
+    
     void Pass1();
     void Pass2();
-    //void Pass3();
+    void Pass3();
 
 
 public:

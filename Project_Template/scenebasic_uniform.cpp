@@ -40,38 +40,9 @@ void SceneBasic_Uniform::initScene()
 
 	glEnable(GL_DEPTH_TEST);
 
-	
+	createQuad();
 
-	// Array for quad
-	GLfloat verts[] = {
-	-1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-	-1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f
-	};
-	GLfloat tc[] = {
-	0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-	0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
-	};
-	// Set up the buffers
-	unsigned int handle[2];
-	glGenBuffers(2, handle);
-	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
-	glBufferData(GL_ARRAY_BUFFER, 6 * 3 * sizeof(float), verts,	GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
-	glBufferData(GL_ARRAY_BUFFER, 6 * 2 * sizeof(float), tc, GL_STATIC_DRAW);
-
-	// Set up the vertex array object
-	glGenVertexArrays(1, &quad);
-	glBindVertexArray(quad);
-	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
-	glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-	glEnableVertexAttribArray(0); // Vertex position
-	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
-	glVertexAttribPointer((GLuint)2, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-	glEnableVertexAttribArray(2); // Texture coordinates
-	glBindVertexArray(0);
 
 	setupFBO();
 
@@ -90,9 +61,9 @@ void SceneBasic_Uniform::compile()
 		prog1.compileShader("shader/Deferr.frag");
 		prog1.link();
 		
-		prog2.compileShader("shader/BlinnPhong.vert");
-		prog2.compileShader("shader/BlinnPhong.frag");
-		prog2.link();
+		prog3.compileShader("shader/BlinnPhong.vert");
+		prog3.compileShader("shader/BlinnPhong.frag");
+		prog3.link();
 		
 	} catch (GLSLProgramException &e) {
 		cerr << e.what() << endl;
@@ -105,24 +76,13 @@ void SceneBasic_Uniform::compile()
 #pragma region setMatrices
 
 
-void SceneBasic_Uniform::setMatrices()
+void SceneBasic_Uniform::setMatrices(GLSLProgram& prog)
 {
 	mat4 mv = view * model;
-	if (pass == 1)
-	{		
-		prog1.setUniform("ModelViewMatrix", mv);
-		prog1.setUniform("NormalMatrix", glm::mat3(vec3(mv[0]), vec3(mv[1]), vec3(mv[2])));
-		prog1.setUniform("MVP", projection * mv);
-	}
-	else if (pass == 2)
-	{
-		prog2.setUniform("MVP", projection * mv);
-
-	}	
-	else
-	{
-	}
-
+			
+	prog.setUniform("ModelViewMatrix", mv);
+	prog.setUniform("NormalMatrix", glm::mat3(vec3(mv[0]), vec3(mv[1]), vec3(mv[2])));
+	prog.setUniform("MVP", projection * mv);
 
 }
 
@@ -155,7 +115,7 @@ void SceneBasic_Uniform::render()
 
 	Pass1();
 	Pass2();
-	
+	Pass3();
 }
 
 
@@ -169,6 +129,47 @@ void SceneBasic_Uniform::resize(int w, int h)
 	projection = glm::perspective(glm::radians(60.0f), (float)w / h, 0.3f, 100.0f);
 }
 
+
+
+void SceneBasic_Uniform::createQuad()
+{
+	// Array for quad
+	GLfloat verts[] = {
+	-1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+	-1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f
+	};
+
+	GLfloat tc[] = {
+	0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+	0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
+	};
+
+	// Set up the buffers
+	unsigned int handle[2];
+	glGenBuffers(2, handle);
+	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
+	glBufferData(GL_ARRAY_BUFFER, 6 * 3 * sizeof(float), verts, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
+	glBufferData(GL_ARRAY_BUFFER, 6 * 2 * sizeof(float), tc, GL_STATIC_DRAW);
+
+	// Set up the vertex array object
+	glGenVertexArrays(1, &quad);
+	glBindVertexArray(quad);
+	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
+	glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glEnableVertexAttribArray(0); // Vertex position
+	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
+	glVertexAttribPointer((GLuint)2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glEnableVertexAttribArray(2); // Texture coordinates
+	glBindVertexArray(0);
+}
+
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 void SceneBasic_Uniform::createGBufTex(GLenum texUnit, GLenum format, GLuint& texid)
 {
 	glActiveTexture(texUnit);
@@ -180,6 +181,8 @@ void SceneBasic_Uniform::createGBufTex(GLenum texUnit, GLenum format, GLuint& te
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 }
+
+
 
 void SceneBasic_Uniform::setupFBO()
 {
@@ -218,6 +221,8 @@ void SceneBasic_Uniform::setupFBO()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+
+
 #pragma region Passes
 
 void SceneBasic_Uniform::Pass1()
@@ -227,7 +232,7 @@ void SceneBasic_Uniform::Pass1()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
-	pass = 1;
+	
 
 	view = glm::lookAt(vec3(7.0f * cos(angle), 4.0f, 7.0f * sin(angle)),
 		vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
@@ -235,12 +240,10 @@ void SceneBasic_Uniform::Pass1()
 		0.3f, 100.0f);
 
 	//Plane
-	prog1.setUniform("Material.Kd", 0.7f, 0.0f, 0.3f);
-
-	
+	prog1.setUniform("Material.Kd", 0.7f, 0.0f, 0.3f);	
 	
 	//model = glm::translate(model, vec3(0.0f, 0.0f, 5.0f));
-	setMatrices();
+	setMatrices(prog1);
 	plane.render();
 
 	
@@ -248,27 +251,33 @@ void SceneBasic_Uniform::Pass1()
 
 void SceneBasic_Uniform::Pass2()
 {
-	prog2.use();
+
+
+}
+
+void SceneBasic_Uniform::Pass3()
+{
+	prog3.use();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glDisable(GL_DEPTH_TEST);
 
-	pass = 2;
+	
 
-	prog2.setUniform("Light.Position", vec4(0.0f, 3.0f, 3.0f, 1.0f));
-	prog2.setUniform("Light.Intensity", 0.7f);
+	prog3.setUniform("Light.Position", vec4(0.0f, 3.0f, 3.0f, 1.0f));
+	prog3.setUniform("Light.Intensity", 0.7f);
 
-	prog2.setUniform("Material.Shininess", 50.0f);
+	prog3.setUniform("Material.Shininess", 50.0f);
 
 	view = mat4(1.0);
 	model = mat4(1.0);
 	projection = mat4(1.0);
-	setMatrices();
+	setMatrices(prog3);
 	
 	
-	//glBindVertexArray(quad);
-	//glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindVertexArray(quad);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 
 }
 
