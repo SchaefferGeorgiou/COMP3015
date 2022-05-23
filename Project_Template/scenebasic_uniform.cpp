@@ -18,17 +18,9 @@ using std::endl;
 
 #include "helper/texture.h"
 
-
 using glm::vec3;
 using glm::vec4;
 using glm::mat4;
-
-
-////SURFACE ANIMATOR
-//SceneBasic_Uniform::SceneBasic_Uniform() : time(0), plane(13.0f, 10.0f, 200, 2)
-//{
-//
-//}
 
 
 SceneBasic_Uniform::SceneBasic_Uniform() : plane(20.0f, 20.0f, 2, 2)
@@ -48,7 +40,41 @@ void SceneBasic_Uniform::initScene()
 
 	glEnable(GL_DEPTH_TEST);
 
-	projection = mat4(1.0f);
+	
+
+	// Array for quad
+	GLfloat verts[] = {
+	-1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+	-1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f
+	};
+	GLfloat tc[] = {
+	0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+	0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
+	};
+	// Set up the buffers
+	unsigned int handle[2];
+	glGenBuffers(2, handle);
+	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
+	glBufferData(GL_ARRAY_BUFFER, 6 * 3 * sizeof(float), verts,	GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
+	glBufferData(GL_ARRAY_BUFFER, 6 * 2 * sizeof(float), tc, GL_STATIC_DRAW);
+
+	// Set up the vertex array object
+	glGenVertexArrays(1, &quad);
+	glBindVertexArray(quad);
+	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
+	glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glEnableVertexAttribArray(0); // Vertex position
+	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
+	glVertexAttribPointer((GLuint)2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glEnableVertexAttribArray(2); // Texture coordinates
+	glBindVertexArray(0);
+
+	setupFBO();
+
 }
 
 #pragma endregion
@@ -59,12 +85,15 @@ void SceneBasic_Uniform::initScene()
 void SceneBasic_Uniform::compile()
 {
 	try {
-		progOne.compileShader("shader/First.vert");
-		//progOne.compileShader("shader/First.geom");
-		progOne.compileShader("shader/First.frag");
+		prog1.compileShader("shader/Deferr.vert");
 		
-		progOne.link();
-		progOne.use();
+		prog1.compileShader("shader/Deferr.frag");
+		prog1.link();
+		
+		prog2.compileShader("shader/BlinnPhong.vert");
+		prog2.compileShader("shader/BlinnPhong.frag");
+		prog2.link();
+		
 	} catch (GLSLProgramException &e) {
 		cerr << e.what() << endl;
 		exit(EXIT_FAILURE);
@@ -79,9 +108,22 @@ void SceneBasic_Uniform::compile()
 void SceneBasic_Uniform::setMatrices()
 {
 	mat4 mv = view * model;
-	progOne.setUniform("ModelViewMatrix", mv);
-	progOne.setUniform("NormalMatrix", glm::mat3(vec3(mv[0]), vec3(mv[1]), vec3(mv[2])));
-	progOne.setUniform("MVP", projection * mv);
+	if (pass == 1)
+	{		
+		prog1.setUniform("ModelViewMatrix", mv);
+		prog1.setUniform("NormalMatrix", glm::mat3(vec3(mv[0]), vec3(mv[1]), vec3(mv[2])));
+		prog1.setUniform("MVP", projection * mv);
+	}
+	else if (pass == 2)
+	{
+		prog2.setUniform("MVP", projection * mv);
+
+	}	
+	else
+	{
+	}
+
+
 }
 
 #pragma endregion
@@ -106,221 +148,18 @@ void SceneBasic_Uniform::update( float t )
 
 #pragma region render
 
-////WEEK 1-5
-//void SceneBasic_Uniform::render()
-//{
-// //   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//
-//	//glm::vec4 lightPos = glm::vec4(2.0f, 1.0f, 2.0f, 1.0f);
-//	//prog.setUniform("Light.Position", view * lightPos);
-//	//prog.setUniform("Light.La", vec3(0.2f, 0.2f, 0.2f));
-//	//prog.setUniform("Light.Ld", vec3(0.2f, 0.2f, 0.2f));
-//
-//	////Skybox
-//	//vec3 cameraPos = vec3(7.0f * cos(angle), 2.0f, 7.0f * sin(angle));
-//	//view = glm::lookAt(cameraPos, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
-//	//// Draw sky
-//	//prog.use();
-//	//model = mat4(1.0f);
-//	//setMatrices();
-//	//sky.render();
-//
-//	//Piggy
-//	//prog.setUniform("Material.Kd", 0.4f, 0.4f, 0.4f);
-//	//prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
-//	//prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
-//	//prog.setUniform("Material.Shininess", 120.0f);
-//	//model = mat4(1.0f);
-//	//model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
-//	//setMatrices();
-//	//mesh->render();
-//
-//	//glm::mat3 normalMatrix = glm::mat3(vec3(view[0]), vec3(view[1]), vec3(view[2]));
-//	//prog.setUniform("Light.Direction", normalMatrix * vec3(-lightPos));
-//
-//	////Ogre
-//	//prog.setUniform("Material.Kd", 0.4f, 0.4f, 0.4f);
-//	//prog.setUniform("Material.Ks", 0.7f, 0.7f, 0.7f);
-//	//prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
-//	//prog.setUniform("Material.Shininess", 2000.0f);
-//	//model = mat4(1.0f);
-//	//setMatrices();
-//	//ogre->render();
-//	
-//	////Cube
-//	//prog.setUniform("Material.Ks", 0.95f, 0.95f, 0.95f);
-//	//prog.setUniform("Material.Shininess", 50.0f);
-//	//model = mat4(1.0f);
-//	//model = glm::translate(model, vec3(0.0f, 0.0f, -1.0f));
-//	//setMatrices();
-//	//cube.render();
-//
-//	////Teapot
-//	//model = mat4(1.0f);
-//	//model = glm::translate(model, vec3(0.0f, 0.0f, -1.0f));
-//	//model = glm::rotate(model, glm::radians(45.0f), vec3(0.0f, 1.0f, 0.0f));
-//	//model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
-//	//setMatrices();
-//	//teapot.render();
-//
-//	////Donut
-//	//prog.setUniform("Material.Kd", 0.2f, 0.55f, 0.9f);
-//	//prog.setUniform("Material.Ks", 0.95f, 0.95f, 0.95f);
-//	//prog.setUniform("Material.Ka", 0.2f * 0.3f, 0.55f * 0.3f, 0.9f * 0.3f);
-//	//prog.setUniform("Material.Shininess", 100.0f);
-//	//model = mat4(1.0f);
-//	//model = glm::translate(model, vec3(-1.0f, 0.75f, 3.0f));
-//	//model = glm::rotate(model, glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
-//	//setMatrices();
-//	//torus.render();
-//
-//	////Plane
-//	//prog.setUniform("Material.Kd", 0.7f, 0.7f, 0.7f);
-//	//prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
-//	//prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
-//	//prog.setUniform("Material.Shininess", 180.0f);
-//	//model = mat4(1.0f);
-//	//setMatrices();
-//	//plane.render();    
-//
-//	////Edge Detection
-//	//pass1();
-//	//glFlush();
-//	//pass2();
-//
-//	////Gaussian Blur
-//	//pass1();
-//	//pass2();
-//	//pass3();
-//
-//	////HDR
-//	//pass1();
-//	//computeLogAveLuminance();
-//	//pass2();
-//
-//	////BLOOM
-//	//pass1();
-//	//computeLogAveLuminance();
-//	//pass2();
-//	//pass3();
-//	//pass4();
-//	//pass5();
-//	
-//	////DEFERRED
-//	//pass1();
-//	//pass2();
-//
-//}
 
-////POINT SPRITE
-//void SceneBasic_Uniform::render()
-//{
-//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//
-//	vec3 cameraPos(0.0f, 0.0f, 3.0f);
-//	view = glm::lookAt(cameraPos,
-//						vec3(0.0f, 0.0f, 0.0f),
-//						vec3(0.0f, 1.0f, 0.0f));
-//
-//	model = mat4(1.0f);
-//	setMatrices();
-//
-//	glBindVertexArray(sprites);
-//	glDrawArrays(GL_POINTS, 0, numSprites);
-//
-//	glFinish();
-//}
-
-////WIREFRAME
-//void SceneBasic_Uniform::render()
-//{
-//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//
-//	vec3 cameraPos(0.0f, 0.0f, 3.0f);
-//	view = glm::lookAt(cameraPos,
-//						vec3(0.0f, 0.0f, 0.0f),
-//						vec3(0.0f, 1.0f, 0.0f));
-//
-//	model = mat4(1.0f);
-//	setMatrices();
-//	ogre->render();
-//
-//	glFinish();
-//}
-
-////SILHOUETTE
-//void SceneBasic_Uniform::render()
-//{
-//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//
-//	vec3 cameraPos(1.5f * cos(angle), 0.0f, 1.5f * sin(angle));
-//	view = glm::lookAt(cameraPos,
-//		vec3(0.0f, -0.2f, 0.0f),
-//		vec3(0.0f, 1.0f, 0.0f));
-//
-//	model = mat4(1.0f);
-//	setMatrices();
-//	ogre->render();
-//
-//	glFinish();
-//}
-
-////SURFACE ANIMATION
-//void SceneBasic_Uniform::render()
-//{
-//	prog.setUniform("Time", time);
-//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//
-//	
-//	view = glm::lookAt(vec3(10.0f * cos(angle),4.0f,10.0f * sin(angle)), vec3(0.0f,0.0f,0.0f), vec3(0.0f, 1.0f, 0.0f));
-//	projection = glm::perspective(glm::radians(60.0f), (float)width / height, 0.3f, 100.0f);
-//
-//	prog.setUniform("Material.Ka", vec3(0.2f, 0.5f, 0.9f));
-//	prog.setUniform("Material.Kd", vec3(0.2f,0.2f,0.2f));
-//	prog.setUniform("Material.Ks", vec3(0.8f, 0.8f, 0.8f));
-//	prog.setUniform("Material.Shininess", 100.0f);
-//	prog.setUniform("Light.Intensity", vec3(1.0f, 1.0f, 1.0f));
-//
-//	model = mat4(1.0f);
-//	model = glm::rotate(model, glm::radians(-10.0f), vec3(0.0f, 0.0f, 1.0f));
-//	model - glm::rotate(model, glm::radians(50.0f), vec3(1.0f, 0.0f, 0.0f));
-//	setMatrices();
-//	plane.render();
-//}
-
-
-//CLOUD EFFECT
 void SceneBasic_Uniform::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-
-	view = glm::lookAt(vec3(0.0f,5.0f,-10.0f), vec3(0.0f,0.0f,0.0f), vec3(0.0f, 1.0f, 0.0f));
-	projection = glm::perspective(glm::radians(67.5f), (float)width / height, 0.3f, 100.0f);
-
-
-	progOne.setUniform("Light.Position", vec4(0.0f,3.0f,3.0f,1.0f));
-	progOne.setUniform("Light.Intensity", 0.7f);
-
-	//Plane
-	progOne.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
-	progOne.setUniform("Material.Kd", 0.7f, 0.0f, 0.3f);
-	progOne.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
-	progOne.setUniform("Material.Shininess", 50.0f);
-	model = mat4(1.0f);
-	model = glm::translate(model, vec3(0.0f, 0.0f, 5.0f));
-
-
-	setMatrices();
-	plane.render();
-
+	Pass1();
+	Pass2();
+	
 }
 
 
 #pragma endregion
-
-#pragma region resize
 
 void SceneBasic_Uniform::resize(int w, int h)
 {
@@ -330,17 +169,109 @@ void SceneBasic_Uniform::resize(int w, int h)
 	projection = glm::perspective(glm::radians(60.0f), (float)w / h, 0.3f, 100.0f);
 }
 
-#pragma endregion
-
-#pragma region drawScene
-
-void SceneBasic_Uniform::drawScene()
+void SceneBasic_Uniform::createGBufTex(GLenum texUnit, GLenum format, GLuint& texid)
 {
+	glActiveTexture(texUnit);
+	glGenTextures(1, &texid);
+	glBindTexture(GL_TEXTURE_2D, texid);
+	glTexStorage2D(GL_TEXTURE_2D, 1, format, width, height);
 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+}
 
+void SceneBasic_Uniform::setupFBO()
+{
+	GLuint depthBuf, posTex, normTex, colourTex;
 
+	// Create and bind the FBO
+	glGenFramebuffers(1, &deferredFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, deferredFBO);
+
+	// The depth buffer
+	glGenRenderbuffers(1, &depthBuf);
+	glBindRenderbuffer(GL_RENDERBUFFER, depthBuf);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+
+	// Create the textures for position, normal and colour
+	createGBufTex(GL_TEXTURE0, GL_RGB32F, posTex); // Position
+	createGBufTex(GL_TEXTURE1, GL_RGB32F, normTex); // Normal
+	createGBufTex(GL_TEXTURE2, GL_RGB8, colourTex); // Colour
+
+	// Attach the textures to the framebuffer
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuf);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,	posTex, 0);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D,	normTex, 0);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D,	colourTex, 0);
+
+	GLenum drawBuffers[] = { GL_NONE,
+							 GL_COLOR_ATTACHMENT0,
+							 GL_COLOR_ATTACHMENT1,
+							 GL_COLOR_ATTACHMENT2 };
+
+	glDrawBuffers(4, drawBuffers);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+#pragma region Passes
+
+void SceneBasic_Uniform::Pass1()
+{
+	prog1.use();
+	glBindFramebuffer(GL_FRAMEBUFFER, deferredFBO);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+
+	pass = 1;
+
+	view = glm::lookAt(vec3(7.0f * cos(angle), 4.0f, 7.0f * sin(angle)),
+		vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+	projection = glm::perspective(glm::radians(60.0f), (float)width / height,
+		0.3f, 100.0f);
+
+	//Plane
+	prog1.setUniform("Material.Kd", 0.7f, 0.0f, 0.3f);
+
+	
+	
+	//model = glm::translate(model, vec3(0.0f, 0.0f, 5.0f));
+	setMatrices();
+	plane.render();
+
+	
+}
+
+void SceneBasic_Uniform::Pass2()
+{
+	prog2.use();
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glDisable(GL_DEPTH_TEST);
+
+	pass = 2;
+
+	prog2.setUniform("Light.Position", vec4(0.0f, 3.0f, 3.0f, 1.0f));
+	prog2.setUniform("Light.Intensity", 0.7f);
+
+	prog2.setUniform("Material.Shininess", 50.0f);
+
+	view = mat4(1.0);
+	model = mat4(1.0);
+	projection = mat4(1.0);
+	setMatrices();
+	
+	
 	//glBindVertexArray(quad);
 	//glDrawArrays(GL_TRIANGLES, 0, 6);
+
 }
 
 #pragma endregion
+
+

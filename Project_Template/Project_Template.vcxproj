@@ -305,11 +305,15 @@
     <None Include="shader\basic_uniform_phong_multiple.vert">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </None>
+    <None Include="shader\Deferr.frag" />
+    <None Include="shader\Deferr.vert" />
     <None Include="shader\First.frag" />
     <None Include="shader\First.geom" />
     <None Include="shader\First.vert" />
-    <None Include="shader\Second.frag" />
-    <None Include="shader\Second.vert" />
+    <None Include="shader\BlinnPhong.frag" />
+    <None Include="shader\BlinnPhong.vert" />
+    <None Include="shader\NoiseMap.frag" />
+    <None Include="shader\NoiseMap.vert" />
     <None Include="shader\solid.frag">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </None>

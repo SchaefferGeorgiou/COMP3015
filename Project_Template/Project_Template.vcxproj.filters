@@ -233,13 +233,25 @@
     <None Include="shader\First.vert">
       <Filter>shaders</Filter>
     </None>
-    <None Include="shader\Second.frag">
+    <None Include="shader\NoiseMap.frag">
       <Filter>shaders</Filter>
     </None>
-    <None Include="shader\Second.vert">
+    <None Include="shader\NoiseMap.vert">
       <Filter>shaders</Filter>
     </None>
     <None Include="shader\First.geom">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader\Deferr.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader\Deferr.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader\BlinnPhong.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader\BlinnPhong.vert">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>
