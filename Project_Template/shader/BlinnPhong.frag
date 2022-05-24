@@ -8,6 +8,7 @@ in vec2 TexCoord;
 layout(binding=0) uniform sampler2D PositionTex;
 layout(binding=1) uniform sampler2D NormalTex;
 layout(binding=2) uniform sampler2D ColourTex;
+layout(binding=3) uniform sampler2D SpecularTex;
 
 //OUT
 layout (location = 0) out vec4 FragColour;
@@ -29,7 +30,7 @@ uniform struct MaterialInfo
 }Material;
 
 //METHODS
-vec3 blinnPhong(vec3 position, vec3 n, vec3 colour) 
+vec3 blinnPhong(vec3 position, vec3 normal, vec3 colour, vec3 spec) 
 {
     
     vec3 diffuse = vec3(0.0f);
@@ -38,7 +39,7 @@ vec3 blinnPhong(vec3 position, vec3 n, vec3 colour)
 
     vec3 s = normalize(((Light.Position).xyz - position)); //calculate s vector       
     
-    float sDotn = max(dot(s,n), 0.0f) ; //calculate dot product between s and n
+    float sDotn = max(dot(s,normal), 0.0f) ; //calculate dot product between s and n
     
     diffuse = colour * sDotn; //calculate the diffuse
 
@@ -46,17 +47,18 @@ vec3 blinnPhong(vec3 position, vec3 n, vec3 colour)
     {
         vec3 v = normalize(-position.xyz);
         vec3 h = normalize(v + s);
-        specular = colour * pow(max( dot(h,n), 0.0), Material.Shininess); 
+        specular = spec * pow(max( dot(h,normal), 0.0), Material.Shininess); 
     }     
 
-    return (diffuse + specular);
+    return Light.Intensity * (diffuse + specular);
 }
 
 void main()
 {
     vec3 pos = vec3(texture(PositionTex, TexCoord));
-    vec3 n = vec3(texture(NormalTex, TexCoord));
-    vec3 lighting = vec3(texture(ColourTex,TexCoord));
+    vec3 norm = vec3(texture(NormalTex, TexCoord));
+    vec3 diff = vec3(texture(ColourTex,TexCoord));
+    vec3 spec = vec3(texture(SpecularTex,TexCoord));
 
-    FragColour = vec4(blinnPhong(pos, n, lighting),1.0);
+    FragColour = vec4(blinnPhong(pos, norm, diff, spec),1.0);
 }

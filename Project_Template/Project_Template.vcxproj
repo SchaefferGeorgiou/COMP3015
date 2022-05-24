@@ -164,6 +164,8 @@
     <ClCompile Include="scenebasic_uniform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shader\Animate.frag" />
+    <None Include="shader\Animate.vert" />
     <None Include="shader\basic_uniform_Blinn_phong_alpha.frag">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </None>

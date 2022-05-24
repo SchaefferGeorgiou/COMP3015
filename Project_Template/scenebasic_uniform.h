@@ -27,7 +27,7 @@ private:
 
     Plane plane;
 
-    float angle;
+    float angle, time;
     
 
     void setMatrices(GLSLProgram&);

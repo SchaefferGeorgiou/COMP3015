@@ -9,9 +9,11 @@ layout (location = 1) in vec3 VertexNormal;
 
 
 
+
 //OUT
 out vec3 Position;
 out vec3 Normal;
+
 
 
 

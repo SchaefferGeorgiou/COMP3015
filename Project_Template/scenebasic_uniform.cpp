@@ -23,7 +23,7 @@ using glm::vec4;
 using glm::mat4;
 
 
-SceneBasic_Uniform::SceneBasic_Uniform() : plane(20.0f, 20.0f, 2, 2)
+SceneBasic_Uniform::SceneBasic_Uniform() : time(0), plane(20.0f, 20.0f, 10, 10)
 {
 
 }
@@ -42,7 +42,7 @@ void SceneBasic_Uniform::initScene()
 
 	createQuad();
 
-
+	angle = glm::half_pi<float>();
 
 	setupFBO();
 
@@ -57,9 +57,12 @@ void SceneBasic_Uniform::compile()
 {
 	try {
 		prog1.compileShader("shader/Deferr.vert");
-		
 		prog1.compileShader("shader/Deferr.frag");
 		prog1.link();
+
+		prog2.compileShader("shader/Animate.vert");
+		prog2.compileShader("shader/Animate.frag");
+		prog2.link();
 		
 		prog3.compileShader("shader/BlinnPhong.vert");
 		prog3.compileShader("shader/BlinnPhong.frag");
@@ -103,7 +106,7 @@ void SceneBasic_Uniform::update( float t )
 	//	angle -= glm::two_pi<float>();		
 	//}
 
-	//time = t;
+	time = t;
 }
 
 #pragma region render
@@ -113,6 +116,7 @@ void SceneBasic_Uniform::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	
 	Pass1();
 	Pass2();
 	Pass3();
@@ -186,7 +190,7 @@ void SceneBasic_Uniform::createGBufTex(GLenum texUnit, GLenum format, GLuint& te
 
 void SceneBasic_Uniform::setupFBO()
 {
-	GLuint depthBuf, posTex, normTex, colourTex;
+	GLuint depthBuf, posTex, normTex, colourTex, specTex;
 
 	// Create and bind the FBO
 	glGenFramebuffers(1, &deferredFBO);
@@ -201,6 +205,7 @@ void SceneBasic_Uniform::setupFBO()
 	createGBufTex(GL_TEXTURE0, GL_RGB32F, posTex); // Position
 	createGBufTex(GL_TEXTURE1, GL_RGB32F, normTex); // Normal
 	createGBufTex(GL_TEXTURE2, GL_RGB8, colourTex); // Colour
+	createGBufTex(GL_TEXTURE3, GL_RGB8, specTex);
 
 	// Attach the textures to the framebuffer
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuf);
@@ -211,12 +216,16 @@ void SceneBasic_Uniform::setupFBO()
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D,	colourTex, 0);
 
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, specTex, 0);
+
 	GLenum drawBuffers[] = { GL_NONE,
 							 GL_COLOR_ATTACHMENT0,
 							 GL_COLOR_ATTACHMENT1,
-							 GL_COLOR_ATTACHMENT2 };
+							 GL_COLOR_ATTACHMENT2,
+							 GL_COLOR_ATTACHMENT3
+	};
 
-	glDrawBuffers(4, drawBuffers);
+	glDrawBuffers(5, drawBuffers);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -228,31 +237,42 @@ void SceneBasic_Uniform::setupFBO()
 void SceneBasic_Uniform::Pass1()
 {
 	prog1.use();
+
 	glBindFramebuffer(GL_FRAMEBUFFER, deferredFBO);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
-	
 
-	view = glm::lookAt(vec3(7.0f * cos(angle), 4.0f, 7.0f * sin(angle)),
-		vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
-	projection = glm::perspective(glm::radians(60.0f), (float)width / height,
-		0.3f, 100.0f);
+	view = glm::lookAt( vec3(7.0f * cos(angle),	 4.0f, 7.0f * sin(angle)), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+	projection = glm::perspective(glm::radians(60.0f), (float)width / height, 0.3f,	100.0f);
 
 	//Plane
-	prog1.setUniform("Material.Kd", 0.7f, 0.0f, 0.3f);	
-	
-	//model = glm::translate(model, vec3(0.0f, 0.0f, 5.0f));
-	setMatrices(prog1);
-	plane.render();
+	prog1.setUniform("Material.Kd", 0.7f, 0.0f, 0.3f);
+	prog1.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
 
+	model = glm::translate(model, vec3(0.0f, 0.0f, -10.0f));
+	//model = glm::rotate(model, glm::radians(45.0f), vec3(1.0f, 0.0f, 0.0f));
+	
+	setMatrices(prog1);
+	
+	
+	
 	
 }
 
 void SceneBasic_Uniform::Pass2()
 {
 
+	prog2.use();
 
+	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	prog2.setUniform("Time", time);
+
+	setMatrices(prog2);
+
+	plane.render();
+	
 }
 
 void SceneBasic_Uniform::Pass3()
@@ -268,7 +288,7 @@ void SceneBasic_Uniform::Pass3()
 	prog3.setUniform("Light.Position", vec4(0.0f, 3.0f, 3.0f, 1.0f));
 	prog3.setUniform("Light.Intensity", 0.7f);
 
-	prog3.setUniform("Material.Shininess", 50.0f);
+	prog3.setUniform("Material.Shininess", 2.0f);
 
 	view = mat4(1.0);
 	model = mat4(1.0);

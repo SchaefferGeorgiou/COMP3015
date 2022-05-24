@@ -254,6 +254,12 @@
     <None Include="shader\BlinnPhong.vert">
       <Filter>shaders</Filter>
     </None>
+    <None Include="shader\Animate.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader\Animate.frag">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="helper\scene.h">
