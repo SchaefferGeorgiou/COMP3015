@@ -22,13 +22,18 @@ private:
 
     GLSLProgram prog1, prog2, prog3;
 
+    //To hold all the things
     GLuint deferredFBO;
+
+    //To project everything onto
     GLuint quad;
+
+    //For Textures
+    
 
     Plane plane;
 
     float angle, time;
-    
 
     void setMatrices(GLSLProgram&);
     void compile();
@@ -40,7 +45,6 @@ private:
     void Pass1();
     void Pass2();
     void Pass3();
-
 
 public:
     SceneBasic_Uniform();

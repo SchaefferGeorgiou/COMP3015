@@ -30,10 +30,7 @@ uniform struct MaterialInfo
 
 void saveData()
 {
-    PositionData = Position.xyz;
-    NormalData = normalize(Normal);
-    ColourData = Material.Kd;
-    SpecularData = Material.Ks;
+
 }
 
 

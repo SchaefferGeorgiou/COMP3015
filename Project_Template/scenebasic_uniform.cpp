@@ -23,7 +23,7 @@ using glm::vec4;
 using glm::mat4;
 
 
-SceneBasic_Uniform::SceneBasic_Uniform() : time(0), plane(20.0f, 20.0f, 10, 10)
+SceneBasic_Uniform::SceneBasic_Uniform() : time(0), plane(20.0f, 20.0f, 200, 200)
 {
 
 }
@@ -56,8 +56,8 @@ void SceneBasic_Uniform::initScene()
 void SceneBasic_Uniform::compile()
 {
 	try {
-		prog1.compileShader("shader/Deferr.vert");
-		prog1.compileShader("shader/Deferr.frag");
+		prog1.compileShader("shader/NoiseMap.vert");
+		prog1.compileShader("shader/NoiseMap.frag");
 		prog1.link();
 
 		prog2.compileShader("shader/Animate.vert");
@@ -120,6 +120,8 @@ void SceneBasic_Uniform::render()
 	Pass1();
 	Pass2();
 	Pass3();
+
+	glFinish();
 }
 
 
@@ -190,8 +192,8 @@ void SceneBasic_Uniform::createGBufTex(GLenum texUnit, GLenum format, GLuint& te
 
 void SceneBasic_Uniform::setupFBO()
 {
-	GLuint depthBuf, posTex, normTex, colourTex, specTex;
 
+	GLuint depthBuf, posTex, normTex, colourTex, specTex;
 	// Create and bind the FBO
 	glGenFramebuffers(1, &deferredFBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, deferredFBO);
@@ -206,31 +208,44 @@ void SceneBasic_Uniform::setupFBO()
 	createGBufTex(GL_TEXTURE1, GL_RGB32F, normTex); // Normal
 	createGBufTex(GL_TEXTURE2, GL_RGB8, colourTex); // Colour
 	createGBufTex(GL_TEXTURE3, GL_RGB8, specTex);
+	
+
+	GLuint noiseTex = NoiseTex::generate2DTex(6.0f);
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, noiseTex);
+
 
 	// Attach the textures to the framebuffer
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuf);
 
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,	posTex, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, posTex, 0);
 
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D,	normTex, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, normTex, 0);
 
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D,	colourTex, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, colourTex, 0);
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, specTex, 0);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, noiseTex, 0);
 
 	GLenum drawBuffers[] = { GL_NONE,
 							 GL_COLOR_ATTACHMENT0,
 							 GL_COLOR_ATTACHMENT1,
 							 GL_COLOR_ATTACHMENT2,
-							 GL_COLOR_ATTACHMENT3
+							 GL_COLOR_ATTACHMENT3,
+							 GL_COLOR_ATTACHMENT4
 	};
 
-	glDrawBuffers(5, drawBuffers);
+
+	
+
+	glDrawBuffers(6, drawBuffers);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+
 }
-
-
 
 #pragma region Passes
 
@@ -242,32 +257,29 @@ void SceneBasic_Uniform::Pass1()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
+	view = glm::lookAt(vec3(7.0f * cos(angle), 4.0f, 7.0f * sin(angle)), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+	projection = glm::perspective(glm::radians(60.0f), (float)width / height, 0.3f, 100.0f);
 
-	view = glm::lookAt( vec3(7.0f * cos(angle),	 4.0f, 7.0f * sin(angle)), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
-	projection = glm::perspective(glm::radians(60.0f), (float)width / height, 0.3f,	100.0f);
 
-	//Plane
-	prog1.setUniform("Material.Kd", 0.7f, 0.0f, 0.3f);
-	prog1.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
 
-	model = glm::translate(model, vec3(0.0f, 0.0f, -10.0f));
-	//model = glm::rotate(model, glm::radians(45.0f), vec3(1.0f, 0.0f, 0.0f));
-	
-	setMatrices(prog1);
-	
-	
-	
 	
 }
 
 void SceneBasic_Uniform::Pass2()
 {
-
 	prog2.use();
 
 	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+	//Plane
+	model = glm::translate(model, vec3(0.0f, 0.0f, -10.0f));
+
+	
 	prog2.setUniform("Time", time);
+
+	prog2.setUniform("Material.Kd", 0.7f, 0.0f, 0.3f);
+	prog2.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
 
 	setMatrices(prog2);
 
@@ -298,7 +310,7 @@ void SceneBasic_Uniform::Pass3()
 	
 	glBindVertexArray(quad);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
-
+	
 }
 
 #pragma endregion

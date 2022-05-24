@@ -3,12 +3,13 @@
 //VARIABLES
 
 //IN
-in vec2 TexCoord;
+layout (location = 2) in vec2 TexCoord;
 
 layout(binding=0) uniform sampler2D PositionTex;
 layout(binding=1) uniform sampler2D NormalTex;
 layout(binding=2) uniform sampler2D ColourTex;
 layout(binding=3) uniform sampler2D SpecularTex;
+layout(binding=4) uniform sampler2D NoiseTex;
 
 //OUT
 layout (location = 0) out vec4 FragColour;
@@ -59,6 +60,7 @@ void main()
     vec3 norm = vec3(texture(NormalTex, TexCoord));
     vec3 diff = vec3(texture(ColourTex,TexCoord));
     vec3 spec = vec3(texture(SpecularTex,TexCoord));
+    vec4 noise = texture(NoiseTex,TexCoord); 
 
-    FragColour = vec4(blinnPhong(pos, norm, diff, spec),1.0);
+    FragColour = vec4(blinnPhong(pos, norm, noise.xyz, spec),1.0);
 }
