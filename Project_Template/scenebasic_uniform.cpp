@@ -193,7 +193,7 @@ void SceneBasic_Uniform::createGBufTex(GLenum texUnit, GLenum format, GLuint& te
 void SceneBasic_Uniform::setupFBO()
 {
 
-	GLuint depthBuf, posTex, normTex, colourTex, specTex;
+	GLuint depthBuf, posTex, normTex, colourTex, specTex, noiseTex;
 	// Create and bind the FBO
 	glGenFramebuffers(1, &deferredFBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, deferredFBO);
@@ -208,11 +208,13 @@ void SceneBasic_Uniform::setupFBO()
 	createGBufTex(GL_TEXTURE1, GL_RGB32F, normTex); // Normal
 	createGBufTex(GL_TEXTURE2, GL_RGB8, colourTex); // Colour
 	createGBufTex(GL_TEXTURE3, GL_RGB8, specTex);
-	
+	createGBufTex(GL_TEXTURE4, GL_RGB8, noiseTex);
 
-	GLuint noiseTex = NoiseTex::generate2DTex(6.0f);
-	glActiveTexture(GL_TEXTURE4);
-	glBindTexture(GL_TEXTURE_2D, noiseTex);
+
+	//NOT WORKING LOOK AT LAB TO FIX YOU GOOBER
+	GLuint noiseTexture = NoiseTex::generate2DTex(6.0f);
+	glActiveTexture(GL_TEXTURE);
+	glBindTexture(GL_TEXTURE_2D, noiseTexture);
 
 
 	// Attach the textures to the framebuffer
