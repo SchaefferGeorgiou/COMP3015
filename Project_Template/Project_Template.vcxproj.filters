@@ -260,6 +260,12 @@
     <None Include="shader\Animate.frag">
       <Filter>shaders</Filter>
     </None>
+    <None Include="shader\Flat.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader\Flat.vert">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="helper\scene.h">

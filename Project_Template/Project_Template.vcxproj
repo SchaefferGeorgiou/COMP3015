@@ -314,6 +314,8 @@
     <None Include="shader\First.vert" />
     <None Include="shader\BlinnPhong.frag" />
     <None Include="shader\BlinnPhong.vert" />
+    <None Include="shader\Flat.frag" />
+    <None Include="shader\Flat.vert" />
     <None Include="shader\NoiseMap.frag" />
     <None Include="shader\NoiseMap.vert" />
     <None Include="shader\solid.frag">

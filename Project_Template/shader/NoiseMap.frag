@@ -7,6 +7,7 @@
 //IN
 layout (location = 2) in vec2 TexCoord;
 
+
 layout(binding=4) uniform sampler2D NoiseTex;
 
 //OUT
@@ -14,17 +15,17 @@ layout(binding=4) uniform sampler2D NoiseTex;
 layout (location = 5) out vec4 NoiseData;
 
 
-uniform vec4 SkyColour = vec4(0.3,0.3,0.7,1.0);
-uniform vec4 CloudColour = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 Colour1 = vec4(0.0,0.0,0.0,1.0);
+uniform vec4 Colour2 = vec4(1.0,1.0,1.0,1.0);
 
 
 void makeTexture()
 {
 	vec4 noise = texture(NoiseTex,TexCoord);
-	float t = (cos(noise.a * PI) + 1.0) / 2.0;
-	vec4 colour = mix(SkyColour, CloudColour, t);
+	float t = (cos(noise.a * PI) + 1) / 2;
+	vec4 colour = mix(Colour1, Colour2, t);
 
-	NoiseData = vec4(colour.rgb,1.0);
+	NoiseData = vec4(colour.rgb, 1.0);
 }
 
 void main()

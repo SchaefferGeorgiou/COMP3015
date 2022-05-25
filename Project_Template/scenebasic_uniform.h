@@ -20,13 +20,14 @@ class SceneBasic_Uniform : public Scene
 {
 private:
 
-    GLSLProgram prog1, prog2, prog3;
+    GLSLProgram prog1, prog2, prog3, prog4;
 
     //To hold all the things
     GLuint deferredFBO;
 
     //To project everything onto
-    GLuint quad;
+    GLuint quad[2], vbos[7];
+
 
     //For Textures
     
@@ -38,13 +39,14 @@ private:
     void setMatrices(GLSLProgram&);
     void compile();
 
-    void createQuad();
+    void createBuffers();
     void createGBufTex(GLenum, GLenum, GLuint&);
     void setupFBO();
     
     void Pass1();
     void Pass2();
     void Pass3();
+    void Pass4();
 
 public:
     SceneBasic_Uniform();

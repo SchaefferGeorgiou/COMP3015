@@ -8,7 +8,6 @@ layout (location = 1) in vec3 Normal;
 layout (location = 2) in vec2 TexCoord;
 
 //OUT
-layout (location = 0) out vec4 FragColour;
 layout (location = 1) out vec3 PositionData;
 layout (location = 2) out vec3 NormalData;
 layout (location = 3) out vec3 ColourData;

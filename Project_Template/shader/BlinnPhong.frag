@@ -54,13 +54,20 @@ vec3 blinnPhong(vec3 position, vec3 normal, vec3 colour, vec3 spec)
     return Light.Intensity * (diffuse + specular);
 }
 
+
+
 void main()
 {
     vec3 pos = vec3(texture(PositionTex, TexCoord));
     vec3 norm = vec3(texture(NormalTex, TexCoord));
     vec3 diff = vec3(texture(ColourTex,TexCoord));
     vec3 spec = vec3(texture(SpecularTex,TexCoord));
-    vec4 noise = texture(NoiseTex,TexCoord); 
+    vec4 noise = texture(NoiseTex,TexCoord);
 
-    FragColour = vec4(blinnPhong(pos, norm, noise.xyz, spec),1.0);
+    
+
+
+    FragColour = vec4(blinnPhong(pos , norm, noise.rgb , spec),1.0);
+
+    
 }
